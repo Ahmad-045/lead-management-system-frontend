@@ -1,7 +1,9 @@
 import React from 'react';
 import Lead from '../components/Lead/Lead';
 import Phase from '../components/Phase/Phase';
+import PhaseEnginners from '../components/PhaseEnginners';
 import { Route, Routes } from 'react-router-dom';
+import UserList from '../components/User/UserList';
 
 const MemberPage = (props) => {
   return (
@@ -20,7 +22,15 @@ const MemberPage = (props) => {
             <Lead authToken={props.authToken} currentUser={props.currentUser} />
           }
         />
-        <Route path="lead/:id/phases" element={<Phase />} />
+        <Route
+          path="lead/:id/phases"
+          element={<Phase authToken={props.authToken} />}
+        />
+        <Route
+          path="lead/:leadId/phases/:phaseId/engineers"
+          element={<PhaseEnginners />}
+        />
+        <Route path="/users" element={<UserList />} />
       </Routes>
     </div>
   );

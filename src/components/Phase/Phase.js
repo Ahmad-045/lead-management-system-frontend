@@ -17,14 +17,14 @@ const Phase = (props) => {
     setModalShow(true);
   };
 
-  const createNewPhase = (phase) => {
+  const createNewPhase = () => {
     setManager(null);
     setModalShow(true);
   };
 
   useEffect(() => {
-    extractPhasesOfLead(id, setPhases);
-  }, [id]);
+    extractPhasesOfLead(id, setPhases, props.authToken);
+  }, [id, props.authToken]);
 
   return (
     <div>

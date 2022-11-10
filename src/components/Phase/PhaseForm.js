@@ -30,7 +30,13 @@ const PhaseForm = (props) => {
       return;
     }
 
-    createNewPhase(formData, props.leadId);
+    createNewPhase(
+      formData,
+      props.leadId,
+      props.setModalShow,
+      props.setPhases,
+      props.id
+    );
   };
 
   const inputFieldChangeHandler = (e) => {

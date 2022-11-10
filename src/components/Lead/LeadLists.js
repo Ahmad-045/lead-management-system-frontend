@@ -25,13 +25,10 @@ const LeadLists = (props) => {
                 Created by
               </th>
               <th scope="col" className="py-3 px-6">
-                Lead Details
-              </th>
-              <th scope="col" className="py-3 px-6">
                 No. of Phases
               </th>
-              <th scope="col" className="py-3 px-6">
-                Phase Details
+              <th scope="col" colSpan={2} className="py-3 px-6">
+                Actions
               </th>
             </tr>
           </thead>
@@ -50,21 +47,22 @@ const LeadLists = (props) => {
                   {lead.created_at.substring(0, 10)}
                 </td>
                 <td className="py-4 px-6">{lead.user.email}</td>
+                <td className="py-4 px-6">{lead.phasesCount}</td>
                 <td className="py-4 px-6">
                   <button
                     onClick={() => props.showLeadDetails(lead)}
                     className="border-2 border-blue-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-blue-600"
                   >
-                    Details
+                    Lead Details
                   </button>
                 </td>
-                <td className="py-4 px-6">{lead.phasesCount}</td>
+
                 <td className="py-4 px-6">
                   <button
                     onClick={() => navigate(`lead/${lead.id}/phases`)}
-                    className="border-2 border-blue-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-blue-600"
+                    className="border-2 border-zinc-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-zinc-600"
                   >
-                    Details
+                    Phase Details
                   </button>
                 </td>
               </tr>

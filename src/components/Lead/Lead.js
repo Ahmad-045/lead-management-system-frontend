@@ -11,7 +11,7 @@ const Lead = (props) => {
   const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
-    getAllTheLeadsFromApi(setLeadsList);
+    getAllTheLeadsFromApi(setLeadsList, props.authToken);
   }, [props.authToken]);
 
   const showLeadDetailsHandler = (lead) => {
