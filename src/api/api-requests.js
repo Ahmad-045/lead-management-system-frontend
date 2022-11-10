@@ -14,15 +14,18 @@ export const loginRequest = async (email, password, setUserHandler) => {
   axios
     .post(`${BASE_URL}/users/sign_in`, data)
     .then((response) => {
-      setUserHandler(response);
-      localStorage.setItem('auth_token', response.headers.authorization);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      axios.defaults.headers.common['Authorization'] =
-        response.headers.authorization;
-      AUTH_TOKEN = response.headers.authorization;
+      if (response.data.user !== null) {
+        setUserHandler(response);
+        localStorage.setItem('auth_token', response.headers.authorization);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        axios.defaults.headers.common['Authorization'] =
+          response.headers.authorization;
+        AUTH_TOKEN = response.headers.authorization;
+      } else {
+        alert('Unauthorized error!. Try Again!');
+      }
     })
     .catch((error) => {
-      alert('Unauthorized error!. Try Again!');
       console.log(error);
     });
 };
