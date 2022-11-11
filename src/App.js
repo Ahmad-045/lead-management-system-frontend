@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import MemberPage from './pages/MemberPage';
 import GuestPage from './pages/GuestPage';
 import Navigation from './components/Navigation';
-import { BrowserRouter as Router, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { logoutRequest } from './api/api-requests';
 

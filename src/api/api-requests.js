@@ -178,6 +178,23 @@ export const assignRolesToUser = (currentUser, newroles, setUsersList) => {
     .catch((error) => console.log(error));
 };
 
+export const registerNewUserApiRequest = (formData, setErrors, setNewUser) => {
+  console.log(formData);
+
+  axios
+    .post(`${BASE_URL}/users`, { user: formData })
+    .then((res) => {
+      alert('Successfully registered to the System!.. Login to Continue!');
+      setNewUser(false);
+      console.log('RES-->', res);
+    })
+    .catch((error) => {
+      // console.log(error.response.data.error);
+      setErrors(error.response.data.error);
+      alert(error.response.data.message);
+    });
+};
+
 const matchUserToSelectFields = (data) => {
   const newOptions = data.map((options) => ({
     value: options.id,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createNewLead, getAllTheLeadsFromApi } from '../../api/api-requests';
+import { createNewLead } from '../../api/api-requests';
 
 const defaultFormState = {
   project_name: '',
@@ -30,8 +30,6 @@ const LeadForm = (props) => {
       props.setModalShow,
       props.setLeadsList
     );
-    // props.setModalShow(false);
-    // getAllTheLeadsFromApi(props.authToken, props.setLeadsList);
   };
 
   const inputFieldChangeHandler = (e) => {

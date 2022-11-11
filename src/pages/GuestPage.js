@@ -15,7 +15,7 @@ const GuestPage = (props) => {
       >
         New User
       </button>
-      {newUser && <SignUpForm />}
+      {newUser && <SignUpForm setNewUser={setNewUser} />}
     </div>
   );
 };
