@@ -52,7 +52,10 @@ export const getAllTheLeadsFromApi = async (setLeadsList, authToken) => {
   axios
     .get(`${BASE_URL}/leads`)
     .then((response) => {
-      setLeadsList(response.data);
+      if (response.user !== null) {
+        setLeadsList(response.data);
+        console.log('Respp--->', response.data);
+      }
     })
     .catch((error) => console.log(error));
 };
@@ -208,6 +211,18 @@ const matchUserToSelectFields = (data) => {
     label: options.email,
   }));
   return newOptions;
+};
+
+export const leadToProjectConvesion = (leadId) => {
+  const data = {
+    lead_id: leadId,
+    conversion_date: new Date(),
+  };
+
+  axios
+    .post(`${BASE_URL}/projects`, data)
+    .then((res) => console.log(res))
+    .catch((error) => console.log(error));
 };
 
 const setauthToken = () => {

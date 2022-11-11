@@ -1,8 +1,13 @@
 import React, { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { leadToProjectConvesion } from '../../api/api-requests';
 
 const LeadLists = (props) => {
   const navigate = useNavigate();
+
+  const makeItASale = (leadId) => {
+    leadToProjectConvesion(leadId);
+  };
   return (
     <Fragment>
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
@@ -29,6 +34,9 @@ const LeadLists = (props) => {
               </th>
               <th scope="col" colSpan={2} className="py-3 px-6">
                 Actions
+              </th>
+              <th scope="col" className="py-3 px-6">
+                Sale
               </th>
             </tr>
           </thead>
@@ -64,6 +72,19 @@ const LeadLists = (props) => {
                   >
                     Phase Details
                   </button>
+                </td>
+                <td className="py-4 px-6">
+                  {lead.sale ? (
+                    <p>Yes</p>
+                  ) : (
+                    <button
+                      type="button"
+                      className="bg-blue-500 py-1 px-3 text-white rounded-md"
+                      onClick={() => makeItASale(lead.id)}
+                    >
+                      Make it a Sale
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
