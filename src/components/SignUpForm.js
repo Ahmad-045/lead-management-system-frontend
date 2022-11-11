@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { registerNewUserApiRequest } from '../api/api-requests';
 
 const defaultFormState = {
@@ -146,12 +146,21 @@ const SignUpForm = (props) => {
                 />
               </div>
             </div>
-            <button
-              className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-500 ease-in-out duration-100"
-              type="submit"
-            >
-              Submit
-            </button>
+            <div className="flex justify-between">
+              <button
+                className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-500 ease-in-out duration-100"
+                type="submit"
+              >
+                Sign Up
+              </button>
+              <button
+                onClick={() => props.setNewUser(false)}
+                className="text-blue-600 underline"
+                type="button"
+              >
+                Log In
+              </button>
+            </div>
           </form>
         </div>
       </div>

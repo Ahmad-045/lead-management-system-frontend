@@ -72,7 +72,11 @@ export const createNewLead = async (
 
   axios
     .post(`${BASE_URL}/leads`, data)
-    .then(() => {
+    .then((res) => {
+      if (checkUnauthoriztionaStatus(res.data.status)) {
+        return;
+      }
+
       alert('Successfull Created the New Lead');
       setModalShow(false);
       getAllTheLeadsFromApi(setLeadsList);
@@ -158,6 +162,9 @@ export const extractUsersFromApi = (setUsersList) => {
   axios
     .get(`${BASE_URL}/users`)
     .then((res) => {
+      if (checkUnauthoriztionaStatus(res.data.status)) {
+        return;
+      }
       console.log(res);
       setUsersList(res.data);
     })
@@ -210,4 +217,12 @@ const setauthToken = () => {
     axios.defaults.headers.common['Authorization'] =
       localStorage.getItem('auth_token');
   }
+};
+
+const checkUnauthoriztionaStatus = (status) => {
+  if (status === 'unauthorized') {
+    alert('Not Authorized to Perform this action!');
+    return true;
+  }
+  return false;
 };

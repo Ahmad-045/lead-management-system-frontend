@@ -57,9 +57,19 @@ const LoginForm = (props) => {
             value={password}
           />
         </div>
-        <div className="flex justify-end mr-3 ">
-          <button className="bg-blue-700 text-white py-2 px-3 rounded-md float-right">
+        <div className="flex justify-between mr-3 ">
+          <button
+            type="submit"
+            className="bg-blue-700 text-white py-2 px-3 rounded-md"
+          >
             Log In
+          </button>
+          <button
+            type="button"
+            className="text-blue-600 underline"
+            onClick={() => props.setNewUser(true)}
+          >
+            New User
           </button>
         </div>
       </form>
