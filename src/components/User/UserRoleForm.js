@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { assignRolesToUser } from '../../api/api-requests';
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -18,6 +19,8 @@ const UserRoleForm = (props) => {
     e.preventDefault();
     console.log(newroles);
     props.setModalShow(false);
+
+    assignRolesToUser(props.currentUser.id, newroles, props.setUsersList);
   };
 
   return (

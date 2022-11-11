@@ -8,14 +8,17 @@ const UserList = () => {
   const [usersList, setUsersList] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   const showUserRoles = (user) => {
     setCurrentUser(user);
+    setShowForm(false);
     setModalShow(true);
   };
 
-  const showFormForRole = () => {
-    setCurrentUser(null);
+  const showFormForRole = (user) => {
+    setCurrentUser(user);
+    setShowForm(true);
     setModalShow(true);
   };
 
@@ -71,8 +74,14 @@ const UserList = () => {
       </table>
       {modalShow && (
         <Modal onhideDetails={() => setModalShow(false)}>
-          {currentUser && <UserRoles currentUser={currentUser} />}
-          {!currentUser && <UserRoleForm setModalShow={setModalShow} />}
+          {!showForm && <UserRoles currentUser={currentUser} />}
+          {showForm && (
+            <UserRoleForm
+              currentUser={currentUser}
+              setModalShow={setModalShow}
+              setUsersList={setUsersList}
+            />
+          )}
         </Modal>
       )}
     </div>

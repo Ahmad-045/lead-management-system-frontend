@@ -164,6 +164,20 @@ export const extractUsersFromApi = (setUsersList) => {
     .catch((error) => console.log(error));
 };
 
+export const assignRolesToUser = (currentUser, newroles, setUsersList) => {
+  let rolesValue = [];
+  newroles.map((role) => rolesValue.push(role.value));
+  setauthToken();
+  axios
+    .patch(`${BASE_URL}/users/${currentUser}`, { data: rolesValue })
+    .then((res) => {
+      console.log(res);
+      alert('Successfully! updated the role');
+      extractUsersFromApi(setUsersList);
+    })
+    .catch((error) => console.log(error));
+};
+
 const matchUserToSelectFields = (data) => {
   const newOptions = data.map((options) => ({
     value: options.id,
@@ -173,6 +187,10 @@ const matchUserToSelectFields = (data) => {
 };
 
 const setauthToken = () => {
-  axios.defaults.headers.common['Authorization'] =
-    AUTH_TOKEN || localStorage.getItem('auth_token');
+  if (AUTH_TOKEN) {
+    axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+  } else {
+    axios.defaults.headers.common['Authorization'] =
+      localStorage.getItem('auth_token');
+  }
 };
