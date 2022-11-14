@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://glacial-ravine-73785.herokuapp.com';
-// const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'https://glacial-ravine-73785.herokuapp.com';
+const BASE_URL = 'http://localhost:3000';
 let AUTH_TOKEN = '';
 
 export const loginRequest = async (email, password, setUserHandler) => {
@@ -92,12 +92,18 @@ export const createNewLead = async (
     .catch((error) => console.log(error));
 };
 
-export const extractPhasesOfLead = async (lead_id, setPhases, authToken) => {
+export const extractPhasesOfLead = async (
+  lead_id,
+  setPhases,
+  authToken,
+  setSpinnerShow
+) => {
   setauthToken();
   axios
     .get(`${BASE_URL}/leads/${lead_id}`)
     .then((res) => {
       setPhases(res.data);
+      setSpinnerShow(false);
     })
     .catch((error) => console.log(error));
 };

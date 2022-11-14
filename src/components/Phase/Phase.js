@@ -5,12 +5,14 @@ import PhaseList from './PhaseList';
 import Modal from '../../UI/Modal';
 import PhaseManagerDetail from './PhaseManagerDetail';
 import PhaseForm from './PhaseForm';
+import Spinner from '../../UI/Spinner';
 
 const Phase = (props) => {
   const { id } = useParams();
   const [phases, setPhases] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [manager, setManager] = useState(null);
+  const [spinnerShow, setSpinnerShow] = useState(true);
 
   const showPhaseManagerDetails = (phase) => {
     setManager(phase.manager);
@@ -23,7 +25,7 @@ const Phase = (props) => {
   };
 
   useEffect(() => {
-    extractPhasesOfLead(id, setPhases, props.authToken);
+    extractPhasesOfLead(id, setPhases, props.authToken, setSpinnerShow);
   }, [id, props.authToken]);
 
   return (
@@ -35,10 +37,14 @@ const Phase = (props) => {
       >
         Create New Phase
       </button>
-      <PhaseList
-        phaselist={phases}
-        showManagerDetails={showPhaseManagerDetails}
-      />
+      {spinnerShow ? (
+        <Spinner />
+      ) : (
+        <PhaseList
+          phaselist={phases}
+          showManagerDetails={showPhaseManagerDetails}
+        />
+      )}
 
       {modalShow && (
         <Modal onhideDetails={() => setModalShow(false)}>
