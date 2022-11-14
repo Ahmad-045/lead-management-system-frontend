@@ -43,6 +43,7 @@ const Phase = (props) => {
         <PhaseList
           phaselist={phases}
           showManagerDetails={showPhaseManagerDetails}
+          setPhases={setPhases}
         />
       )}
 

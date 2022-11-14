@@ -31,7 +31,12 @@ export const loginRequest = async (email, password, setUserHandler) => {
     });
 };
 
-export const logoutRequest = async (authToken) => {
+export const logoutRequest = async (
+  authToken,
+  setAuthToken,
+  setUser,
+  setLoggedIn
+) => {
   const config = {
     header: {
       authorization: authToken,
@@ -40,15 +45,24 @@ export const logoutRequest = async (authToken) => {
 
   axios
     .delete(`${BASE_URL}/users/sign_out`, config)
-    .then(() => alert('Successfully Logged out'))
+    .then(() => {
+      setAuthToken(null);
+      setUser(null);
+      setLoggedIn(false);
+    })
     .catch((error) => console.log(error));
 
+  alert('Successfully Logged out');
   axios.defaults.headers.common['Authorization'] = null;
   localStorage.removeItem('auth_token');
   localStorage.removeItem('user');
 };
 
-export const getAllTheLeadsFromApi = async (setLeadsList, authToken) => {
+export const getAllTheLeadsFromApi = async (
+  setLeadsList,
+  authToken,
+  setSpinnerShow
+) => {
   setauthToken();
   // console.log(axios.defaults.headers.common['Authorization']);
   axios
@@ -57,6 +71,7 @@ export const getAllTheLeadsFromApi = async (setLeadsList, authToken) => {
       console.log('RESPP--->', response);
       if (response.data.user !== null) {
         setLeadsList(response.data);
+        setSpinnerShow(false);
       } else {
         alert('Login Again!!');
         logoutRequest(authToken);
@@ -69,8 +84,10 @@ export const createNewLead = async (
   formData,
   user,
   setModalShow,
-  setLeadsList
+  setLeadsList,
+  setSpinnerShow
 ) => {
+  setSpinnerShow(true);
   setauthToken();
   const data = {
     ...formData,
@@ -82,14 +99,19 @@ export const createNewLead = async (
     .post(`${BASE_URL}/leads`, data)
     .then((res) => {
       if (checkUnauthoriztionaStatus(res.data.status)) {
+        setSpinnerShow(false);
         return;
       }
 
       alert('Successfull Created the New Lead');
+      setSpinnerShow(false);
       setModalShow(false);
       getAllTheLeadsFromApi(setLeadsList);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      setSpinnerShow(false);
+    });
 };
 
 export const extractPhasesOfLead = async (
@@ -108,27 +130,40 @@ export const extractPhasesOfLead = async (
     .catch((error) => console.log(error));
 };
 
-export const extractManagersForForm = async (setManagers) => {
+export const extractManagersForForm = async (setManagers, setSpinnerShow) => {
   setauthToken();
   axios
     .get(`${BASE_URL}/get_managers`)
-    .then((res) => setManagers(matchUserToSelectFields(res.data)))
-    .catch((eror) => console.log(eror));
+    .then((res) => {
+      setManagers(matchUserToSelectFields(res.data));
+      setSpinnerShow(false);
+    })
+    .catch((eror) => {
+      console.log(eror);
+      setSpinnerShow(false);
+    });
 };
 
-export const extractEngineersForForm = async (setEngineers, authToken) => {
+export const extractEngineersForForm = async (setEngineers, setSpinnerShow) => {
   setauthToken();
   axios
     .get(`${BASE_URL}/get_engineers`)
-    .then((res) => setEngineers(matchUserToSelectFields(res.data)))
-    .catch((error) => console.log(error));
+    .then((res) => {
+      setEngineers(matchUserToSelectFields(res.data));
+      setSpinnerShow(false);
+    })
+    .catch((error) => {
+      console.log(error);
+      setSpinnerShow(false);
+    });
 };
 
 export const createNewPhase = async (
   formData,
   lead_id,
   setModalShow,
-  setPhases
+  setPhases,
+  setSpinnerShow
 ) => {
   setauthToken();
   const data = {
@@ -140,49 +175,84 @@ export const createNewPhase = async (
     .then((res) => {
       setModalShow(false);
       extractPhasesOfLead(lead_id, setPhases);
+      setSpinnerShow(false);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      setSpinnerShow(false);
+    });
 };
 
-export const phaseStatusApiRequest = (phaseId, newValue) => {
+export const phaseStatusApiRequest = (phaseId, newValue, setSpinnerShow) => {
   setauthToken();
   axios
     .patch(`${BASE_URL}/phases/${phaseId}`, { status: newValue })
-    .then((res) => console.log(res))
-    .catch((error) => console.log(error));
+    .then((res) => {
+      console.log(res);
+      setSpinnerShow(false);
+      alert('Successfully, Updated the Phase State');
+    })
+    .catch((error) => {
+      console.log(error);
+      setSpinnerShow(false);
+    });
 };
 
-export const assignEnginnersApiRequest = (engIds, id) => {
+export const assignEnginnersApiRequest = (
+  engIds,
+  id,
+  setSpinnerShow,
+  hideModal
+) => {
   setauthToken();
   axios
     .post(`${BASE_URL}/assign_engineer`, { data: { engIds, id } })
     .then((res) => {
-      console.log(res);
+      setSpinnerShow(false);
+      hideModal(false);
       alert('Successfully, Added the Engineers');
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      setSpinnerShow(false);
+      hideModal(false);
+    });
 };
 
-export const extractEngineersOfPhase = (phaseId, setEngineers) => {
+export const extractEngineersOfPhase = (
+  phaseId,
+  setEngineers,
+  setSpinnerShow
+) => {
   setauthToken();
   axios
     .get(`${BASE_URL}/get_engineer_users/${phaseId}`)
-    .then((res) => setEngineers(res.data))
-    .catch((error) => console.log(error));
+    .then((res) => {
+      setEngineers(res.data);
+      setSpinnerShow(false);
+    })
+    .catch((error) => {
+      console.log(error);
+      setSpinnerShow(false);
+    });
 };
 
-export const extractUsersFromApi = (setUsersList) => {
+export const extractUsersFromApi = (setUsersList, setSpinnerShow) => {
   setauthToken();
   axios
     .get(`${BASE_URL}/users`)
     .then((res) => {
       if (checkUnauthoriztionaStatus(res.data.status)) {
+        setSpinnerShow(false);
         return;
       }
-      console.log(res);
       setUsersList(res.data);
+      setSpinnerShow(false);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      setSpinnerShow(false);
+    });
 };
 
 export const assignRolesToUser = (currentUser, newroles, setUsersList) => {

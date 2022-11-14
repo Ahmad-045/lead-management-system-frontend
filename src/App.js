@@ -5,12 +5,14 @@ import Navigation from './components/Navigation';
 import { useNavigate } from 'react-router-dom';
 
 import { logoutRequest } from './api/api-requests';
+// import Spinner from '../../UI/Spinner';
 
 function App() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setAuthToken] = useState(null);
-  const navigate = useNavigate();
+  // const [spinnerShow, setSpinnerShow] = useState(true);
 
   useEffect(() => {
     const extractDataFromLocalStorage = () => {
@@ -33,10 +35,7 @@ function App() {
   };
 
   const logoutUserHandler = () => {
-    logoutRequest(authToken);
-    setAuthToken(null);
-    setUser(null);
-    setLoggedIn(false);
+    logoutRequest(authToken, setAuthToken, setUser, setLoggedIn);
     navigate('/');
   };
 

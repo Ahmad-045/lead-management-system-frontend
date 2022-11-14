@@ -4,14 +4,16 @@ import LeadDetails from './LeadDetails';
 import LeadLists from './LeadLists';
 import Modal from '../../UI/Modal';
 import LeadForm from './LeadForm';
+import Spinner from '../../UI/Spinner';
 
 const Lead = (props) => {
   const [leadsList, setLeadsList] = useState([]);
   const [singleleadData, setSingleleadData] = useState(null);
   const [modalShow, setModalShow] = useState(false);
+  const [spinnerShow, setSpinnerShow] = useState(true);
 
   useEffect(() => {
-    getAllTheLeadsFromApi(setLeadsList, props.authToken);
+    getAllTheLeadsFromApi(setLeadsList, props.authToken, setSpinnerShow);
   }, [props.authToken]);
 
   const showLeadDetailsHandler = (lead) => {
@@ -34,11 +36,15 @@ const Lead = (props) => {
       >
         Create New Lead
       </button>
-      <LeadLists
-        leadslist={leadsList}
-        showLeadDetails={showLeadDetailsHandler}
-        setLeadsList={setLeadsList}
-      />
+      {spinnerShow ? (
+        <Spinner />
+      ) : (
+        <LeadLists
+          leadslist={leadsList}
+          showLeadDetails={showLeadDetailsHandler}
+          setLeadsList={setLeadsList}
+        />
+      )}
 
       {modalShow && (
         <Modal onhideDetails={() => setModalShow(false)}>
