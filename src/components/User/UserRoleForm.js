@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { assignRolesToUser } from '../../api/api-requests';
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import Spinner from '../../UI/Spinner';
 
 const animatedComponents = makeAnimated();
 
 const UserRoleForm = (props) => {
   const [newroles, setNewroles] = useState([]);
+  const [spinnerShow, setSpinnerShow] = useState(false);
+
   const availableRoles = [
     { value: 'admin', label: 'Admin' },
     { value: 'manager', label: 'Manager' },
@@ -17,30 +20,42 @@ const UserRoleForm = (props) => {
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    props.setModalShow(false);
+    setSpinnerShow(true);
 
-    assignRolesToUser(props.currentUser.id, newroles, props.setUsersList);
+    assignRolesToUser(
+      props.currentUser.id,
+      newroles,
+      props.setUsersList,
+      props.setModalShow,
+      setSpinnerShow
+    );
   };
 
   return (
-    <form onSubmit={submitFormHandler}>
-      <h1 className="mb-5 font-medium underline text-xl">
-        Available Roles in the Company
-      </h1>
-      <Select
-        options={availableRoles}
-        components={animatedComponents}
-        isMulti
-        closeMenuOnSelect={true}
-        onChange={setNewroles}
-      />
-      <button
-        type="submit"
-        className="float-right my-5 mr-5 bg-blue-600 text-white px-3 py-1 rounded-md"
-      >
-        Update Roles
-      </button>
-    </form>
+    <Fragment>
+      {spinnerShow ? (
+        <Spinner />
+      ) : (
+        <form onSubmit={submitFormHandler}>
+          <h1 className="mb-5 font-medium underline text-xl">
+            Available Roles in the Company
+          </h1>
+          <Select
+            options={availableRoles}
+            components={animatedComponents}
+            isMulti
+            closeMenuOnSelect={true}
+            onChange={setNewroles}
+          />
+          <button
+            type="submit"
+            className="float-right my-5 mr-5 bg-blue-600 text-white px-3 py-1 rounded-md"
+          >
+            Update Roles
+          </button>
+        </form>
+      )}
+    </Fragment>
   );
 };
 

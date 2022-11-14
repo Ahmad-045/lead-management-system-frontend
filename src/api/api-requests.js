@@ -260,7 +260,13 @@ export const extractUsersFromApi = (setUsersList, setSpinnerShow) => {
     });
 };
 
-export const assignRolesToUser = (currentUser, newroles, setUsersList) => {
+export const assignRolesToUser = (
+  currentUser,
+  newroles,
+  setUsersList,
+  setModalShow,
+  setSpinnerShow
+) => {
   let rolesValue = [];
   newroles.map((role) => rolesValue.push(role.value));
   setauthToken();
@@ -269,6 +275,8 @@ export const assignRolesToUser = (currentUser, newroles, setUsersList) => {
     .then((res) => {
       alert('Successfully! updated the role');
       extractUsersFromApi(setUsersList);
+      setModalShow(false);
+      setSpinnerShow(false);
     })
     .catch((error) => console.log(error));
 };
