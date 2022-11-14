@@ -102,9 +102,6 @@ const LeadForm = (props) => {
                   name="client_address"
                   onChange={inputFieldChangeHandler}
                 />
-                <p className="text-gray-600 text-xs italic">
-                  Make it as long and as crazy as you'd like
-                </p>
               </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-6">

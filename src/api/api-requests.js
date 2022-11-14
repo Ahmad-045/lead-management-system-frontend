@@ -281,16 +281,24 @@ export const assignRolesToUser = (
     .catch((error) => console.log(error));
 };
 
-export const registerNewUserApiRequest = (formData, setErrors, setNewUser) => {
+export const registerNewUserApiRequest = (
+  formData,
+  setErrors,
+  setNewUser,
+  setSpinnerShow
+) => {
+  setSpinnerShow(true);
   axios
     .post(`${BASE_URL}/users`, { user: formData })
     .then((res) => {
       alert('Successfully registered to the System!.. Login to Continue!');
       setNewUser(false);
+      setSpinnerShow(false);
     })
     .catch((error) => {
       setErrors(error.response.data.error);
       alert(error.response.data.message);
+      setSpinnerShow(false);
     });
 };
 
