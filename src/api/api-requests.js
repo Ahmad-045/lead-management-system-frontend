@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://glacial-ravine-73785.herokuapp.com';
-// const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'https://glacial-ravine-73785.herokuapp.com';
+const BASE_URL = 'http://localhost:3000';
 let AUTH_TOKEN = '';
 
 export const loginRequest = async (
@@ -274,11 +274,23 @@ export const assignRolesToUser = (
     .patch(`${BASE_URL}/users/${currentUser}`, { data: rolesValue })
     .then((res) => {
       alert('Successfully! updated the role');
-      extractUsersFromApi(setUsersList);
+      extractUsersFromApi(setUsersList, setSpinnerShow);
       setModalShow(false);
       setSpinnerShow(false);
     })
     .catch((error) => console.log(error));
+};
+
+export const extractUserRoles = (user) => {
+  setauthToken();
+  axios
+    .get(`${BASE_URL}/users`)
+    .then((res) => {
+      if (checkUnauthoriztionaStatus(res.data.status)) {
+        return;
+      }
+    })
+    .catch((error) => {});
 };
 
 export const registerNewUserApiRequest = (

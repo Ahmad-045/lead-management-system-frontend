@@ -4,6 +4,7 @@ import Modal from '../../UI/Modal';
 import UserRoles from './UserRoles';
 import UserRoleForm from './UserRoleForm';
 import Spinner from '../../UI/Spinner';
+import { RolesLabel } from '../../data/roles-data';
 
 const UserList = () => {
   const [usersList, setUsersList] = useState([]);
@@ -11,6 +12,7 @@ const UserList = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [spinnerShow, setSpinnerShow] = useState(true);
+  const [userRole, setUserRole] = useState([]);
 
   const showUserRoles = (user) => {
     setCurrentUser(user);
@@ -22,6 +24,15 @@ const UserList = () => {
     setCurrentUser(user);
     setShowForm(true);
     setModalShow(true);
+    AdjustDateForSelectField(user);
+  };
+
+  const AdjustDateForSelectField = (user) => {
+    const currentUserRoes = user.roles.map((role) => ({
+      value: role.name,
+      label: RolesLabel[role.name],
+    }));
+    setUserRole(currentUserRoes);
   };
 
   useEffect(() => {
@@ -70,7 +81,7 @@ const UserList = () => {
                     onClick={() => showFormForRole(user)}
                     className="border-2 border-blue-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-blue-600"
                   >
-                    New Role
+                    Add / Remove Role
                   </button>
                 </td>
               </tr>
@@ -86,6 +97,7 @@ const UserList = () => {
               currentUser={currentUser}
               setModalShow={setModalShow}
               setUsersList={setUsersList}
+              userRole={userRole}
             />
           )}
         </Modal>

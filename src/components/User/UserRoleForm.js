@@ -1,22 +1,26 @@
-import React, { Fragment, useState } from 'react';
-import { assignRolesToUser } from '../../api/api-requests';
+import React, { Fragment, useState, useEffect } from 'react';
+import { assignRolesToUser, extractUserRoles } from '../../api/api-requests';
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import Spinner from '../../UI/Spinner';
+import { RolesLabel, AVAL_ROLES } from '../../data/roles-data';
 
 const animatedComponents = makeAnimated();
 
 const UserRoleForm = (props) => {
   const [newroles, setNewroles] = useState([]);
   const [spinnerShow, setSpinnerShow] = useState(false);
+  const [userRole, setUserRole] = useState([]);
 
-  const availableRoles = [
-    { value: 'admin', label: 'Admin' },
-    { value: 'manager', label: 'Manager' },
-    { value: 'engineer', label: 'Engineer' },
-    { value: 'bd', label: 'Business Developer' },
-  ];
+  useEffect(() => {
+    // const currentUserRoes = props.currentUser.roles.map((role) => ({
+    //   value: role.name,
+    //   label: RolesLabel[role.name],
+    // }));
+    // setUserRole(currentUserRoes);
+    // setUserRole(easd);
+  }, [props.currentUser]);
 
   const submitFormHandler = (e) => {
     e.preventDefault();
@@ -41,7 +45,8 @@ const UserRoleForm = (props) => {
             Available Roles in the Company
           </h1>
           <Select
-            options={availableRoles}
+            defaultValue={props.userRole}
+            options={AVAL_ROLES}
             components={animatedComponents}
             isMulti
             closeMenuOnSelect={true}
