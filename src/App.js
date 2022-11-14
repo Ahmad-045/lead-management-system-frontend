@@ -16,7 +16,10 @@ function App() {
 
   useEffect(() => {
     const extractDataFromLocalStorage = () => {
-      if (localStorage.getItem('user') !== null) {
+      if (
+        localStorage.getItem('user') !== null &&
+        localStorage.getItem('user') !== 'undefined'
+      ) {
         setUser(JSON.parse(localStorage.getItem('user')));
         setAuthToken(localStorage.getItem('auth_token'));
         setLoggedIn(true);
@@ -26,9 +29,8 @@ function App() {
   }, []);
 
   const loginUserHandler = (responseFromApiRequest) => {
-    console.log(responseFromApiRequest);
+    // console.log(responseFromApiRequest);
     setUser(responseFromApiRequest.data.user);
-    console.log(responseFromApiRequest);
     setAuthToken(responseFromApiRequest.headers.authorization);
 
     responseFromApiRequest.data.user !== null
@@ -59,6 +61,8 @@ function App() {
             <GuestPage
               setUserHandler={loginUserHandler}
               setSpinnerShow={setSpinnerShow}
+              setUser={setUser}
+              setAuthToken={setAuthToken}
             />
           )
         )}

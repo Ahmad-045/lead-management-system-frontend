@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://glacial-ravine-73785.herokuapp.com';
-// const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'https://glacial-ravine-73785.herokuapp.com';
+const BASE_URL = 'http://localhost:3000';
 let AUTH_TOKEN = '';
 
 export const loginRequest = async (
@@ -20,6 +20,11 @@ export const loginRequest = async (
   axios
     .post(`${BASE_URL}/users/sign_in`, data)
     .then((response) => {
+      if (checkUnauthoriztionaStatus(response.data.status)) {
+        setSpinnerShow(false);
+        return;
+      }
+
       if (response.data.user !== null) {
         setUserHandler(response);
         localStorage.setItem('auth_token', response.headers.authorization);
@@ -29,8 +34,6 @@ export const loginRequest = async (
         AUTH_TOKEN = response.headers.authorization;
         setSpinnerShow(false);
       } else {
-        alert('Unauthorized error!. Try Again!');
-        setSpinnerShow(false);
       }
     })
     .catch((error) => {
