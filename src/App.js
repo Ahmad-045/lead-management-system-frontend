@@ -5,14 +5,14 @@ import Navigation from './components/Navigation';
 import { useNavigate } from 'react-router-dom';
 
 import { logoutRequest } from './api/api-requests';
-// import Spinner from '../../UI/Spinner';
+import Spinner from './UI/Spinner';
 
 function App() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [authToken, setAuthToken] = useState(null);
-  // const [spinnerShow, setSpinnerShow] = useState(true);
+  const [spinnerShow, setSpinnerShow] = useState(false);
 
   useEffect(() => {
     const extractDataFromLocalStorage = () => {
@@ -48,8 +48,19 @@ function App() {
           currentUser={user}
         />
       </nav>
-      {loggedIn && <MemberPage currentUser={user} authToken={authToken} />}
-      {!loggedIn && <GuestPage setUserHandler={loginUserHandler} />}
+      <div className="p-5">
+        {loggedIn && <MemberPage currentUser={user} authToken={authToken} />}
+        {spinnerShow ? (
+          <Spinner />
+        ) : (
+          !loggedIn && (
+            <GuestPage
+              setUserHandler={loginUserHandler}
+              setSpinnerShow={setSpinnerShow}
+            />
+          )
+        )}
+      </div>
     </div>
   );
 }

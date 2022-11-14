@@ -25,7 +25,7 @@ const Lead = (props) => {
     setSingleleadData(null);
     setModalShow(true);
   };
-  console.log(props.currentUser);
+
   return (
     <div className="mt-3">
       <h1 className="text-lg font-medium">Leads Available</h1>

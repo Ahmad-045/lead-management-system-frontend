@@ -1,7 +1,6 @@
 import React from 'react';
 
 const UserRoles = (props) => {
-  console.log(props.currentUser);
   return (
     <div>
       <h1 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">

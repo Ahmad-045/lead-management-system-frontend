@@ -13,7 +13,7 @@ const LoginForm = (props) => {
       return;
     }
 
-    loginRequest(email, password, props.setUserHandler);
+    loginRequest(email, password, props.setUserHandler, props.setSpinnerShow);
 
     setEmail('');
     setPassword('');

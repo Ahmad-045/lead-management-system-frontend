@@ -17,7 +17,6 @@ const UserRoleForm = (props) => {
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    console.log(newroles);
     props.setModalShow(false);
 
     assignRolesToUser(props.currentUser.id, newroles, props.setUsersList);

@@ -11,6 +11,7 @@ const GuestPage = (props) => {
       {!newUser && (
         <LoginForm
           setUserHandler={props.setUserHandler}
+          setSpinnerShow={props.setSpinnerShow}
           setNewUser={setNewUser}
         />
       )}

@@ -4,14 +4,19 @@ const BASE_URL = 'https://glacial-ravine-73785.herokuapp.com';
 // const BASE_URL = 'http://localhost:3000';
 let AUTH_TOKEN = '';
 
-export const loginRequest = async (email, password, setUserHandler) => {
+export const loginRequest = async (
+  email,
+  password,
+  setUserHandler,
+  setSpinnerShow
+) => {
   let data = {
     user: {
       email: email,
       password: password,
     },
   };
-
+  setSpinnerShow(true);
   axios
     .post(`${BASE_URL}/users/sign_in`, data)
     .then((response) => {
@@ -22,12 +27,15 @@ export const loginRequest = async (email, password, setUserHandler) => {
         axios.defaults.headers.common['Authorization'] =
           response.headers.authorization;
         AUTH_TOKEN = response.headers.authorization;
+        setSpinnerShow(false);
       } else {
         alert('Unauthorized error!. Try Again!');
+        setSpinnerShow(false);
       }
     })
     .catch((error) => {
       console.log(error);
+      setSpinnerShow(false);
     });
 };
 
@@ -64,11 +72,9 @@ export const getAllTheLeadsFromApi = async (
   setSpinnerShow
 ) => {
   setauthToken();
-  // console.log(axios.defaults.headers.common['Authorization']);
   axios
     .get(`${BASE_URL}/leads`)
     .then((response) => {
-      console.log('RESPP--->', response);
       if (response.data.user !== null) {
         setLeadsList(response.data);
         setSpinnerShow(false);
@@ -188,7 +194,6 @@ export const phaseStatusApiRequest = (phaseId, newValue, setSpinnerShow) => {
   axios
     .patch(`${BASE_URL}/phases/${phaseId}`, { status: newValue })
     .then((res) => {
-      console.log(res);
       setSpinnerShow(false);
       alert('Successfully, Updated the Phase State');
     })
@@ -262,7 +267,6 @@ export const assignRolesToUser = (currentUser, newroles, setUsersList) => {
   axios
     .patch(`${BASE_URL}/users/${currentUser}`, { data: rolesValue })
     .then((res) => {
-      console.log(res);
       alert('Successfully! updated the role');
       extractUsersFromApi(setUsersList);
     })
@@ -270,14 +274,11 @@ export const assignRolesToUser = (currentUser, newroles, setUsersList) => {
 };
 
 export const registerNewUserApiRequest = (formData, setErrors, setNewUser) => {
-  console.log(formData);
-
   axios
     .post(`${BASE_URL}/users`, { user: formData })
     .then((res) => {
       alert('Successfully registered to the System!.. Login to Continue!');
       setNewUser(false);
-      console.log('RES-->', res);
     })
     .catch((error) => {
       setErrors(error.response.data.error);
@@ -309,14 +310,12 @@ export const leadToProjectConvesion = (leadId, setLeadsList) => {
 };
 
 const setauthToken = () => {
-  // console.log(AUTH_TOKEN);
   if (AUTH_TOKEN.length !== 0) {
     axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
   } else {
     axios.defaults.headers.common['Authorization'] =
       localStorage.getItem('auth_token');
   }
-  // console.log(axios.defaults.headers.common['Authorization']);
 };
 
 const checkUnauthoriztionaStatus = (status) => {
