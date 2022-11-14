@@ -6,7 +6,7 @@ const LeadLists = (props) => {
   const navigate = useNavigate();
 
   const makeItASale = (leadId) => {
-    leadToProjectConvesion(leadId);
+    leadToProjectConvesion(leadId, props.setLeadsList);
   };
   return (
     <Fragment>
@@ -75,7 +75,7 @@ const LeadLists = (props) => {
                 </td>
                 <td className="py-4 px-6">
                   {lead.sale ? (
-                    <p>Yes</p>
+                    <p>{lead.sale}</p>
                   ) : (
                     <button
                       type="button"

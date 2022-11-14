@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://glacial-ravine-73785.herokuapp.com';
+// const BASE_URL = 'http://localhost:3000';
 let AUTH_TOKEN = '';
 
 export const loginRequest = async (email, password, setUserHandler) => {
@@ -49,12 +50,16 @@ export const logoutRequest = async (authToken) => {
 
 export const getAllTheLeadsFromApi = async (setLeadsList, authToken) => {
   setauthToken();
+  // console.log(axios.defaults.headers.common['Authorization']);
   axios
     .get(`${BASE_URL}/leads`)
     .then((response) => {
-      if (response.user !== null) {
+      console.log('RESPP--->', response);
+      if (response.data.user !== null) {
         setLeadsList(response.data);
-        console.log('Respp--->', response.data);
+      } else {
+        alert('Login Again!!');
+        logoutRequest(authToken);
       }
     })
     .catch((error) => console.log(error));
@@ -199,7 +204,6 @@ export const registerNewUserApiRequest = (formData, setErrors, setNewUser) => {
       console.log('RES-->', res);
     })
     .catch((error) => {
-      // console.log(error.response.data.error);
       setErrors(error.response.data.error);
       alert(error.response.data.message);
     });
@@ -213,7 +217,7 @@ const matchUserToSelectFields = (data) => {
   return newOptions;
 };
 
-export const leadToProjectConvesion = (leadId) => {
+export const leadToProjectConvesion = (leadId, setLeadsList) => {
   const data = {
     lead_id: leadId,
     conversion_date: new Date(),
@@ -221,17 +225,22 @@ export const leadToProjectConvesion = (leadId) => {
 
   axios
     .post(`${BASE_URL}/projects`, data)
-    .then((res) => console.log(res))
+    .then((res) => {
+      alert('successfully! updated the Leads');
+      getAllTheLeadsFromApi(setLeadsList);
+    })
     .catch((error) => console.log(error));
 };
 
 const setauthToken = () => {
-  if (AUTH_TOKEN) {
+  // console.log(AUTH_TOKEN);
+  if (AUTH_TOKEN.length !== 0) {
     axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
   } else {
     axios.defaults.headers.common['Authorization'] =
       localStorage.getItem('auth_token');
   }
+  // console.log(axios.defaults.headers.common['Authorization']);
 };
 
 const checkUnauthoriztionaStatus = (status) => {

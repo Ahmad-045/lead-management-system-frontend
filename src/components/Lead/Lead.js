@@ -37,6 +37,7 @@ const Lead = (props) => {
       <LeadLists
         leadslist={leadsList}
         showLeadDetails={showLeadDetailsHandler}
+        setLeadsList={setLeadsList}
       />
 
       {modalShow && (
