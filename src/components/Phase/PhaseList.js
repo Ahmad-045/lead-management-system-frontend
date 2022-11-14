@@ -1,10 +1,11 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Select from 'react-select';
 import { phaseStatusApiRequest } from '../../api/api-requests';
 import Modal from '../../UI/Modal';
 import EngineerForm from '../EngineerForm';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../../UI/Spinner';
+import { STATUS_LIST } from '../../data/roles-data';
 
 const PhaseList = (props) => {
   const navigate = useNavigate();
@@ -12,14 +13,18 @@ const PhaseList = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const [phaseId, setPhaseId] = useState(null);
   const [spinnerShow, setSpinnerShow] = useState(false);
+  const [canUpdate, setCanUpdate] = useState(true);
 
-  const statuslists = [
-    { value: '0', label: 'not_completed' },
-    { value: '1', label: 'completed' },
-  ];
+  useEffect(() => {
+    props.currentUser.roles.map((role) => {
+      if (role.name !== 'engineer') {
+        setCanUpdate(false);
+      }
+    });
+  }, []);
 
   const reshapePhaseStatus = (status) => {
-    let obj = statuslists.find((o) => o.label === status);
+    let obj = STATUS_LIST.find((o) => o.label === status);
     return obj;
   };
 
@@ -88,7 +93,8 @@ const PhaseList = (props) => {
                     <td className="py-4 px-6">{phase.end_date}</td>
                     <td className="py-4 px-6">
                       <Select
-                        options={statuslists}
+                        isDisabled={canUpdate}
+                        options={STATUS_LIST}
                         defaultValue={reshapePhaseStatus(phase.status)}
                         onChange={(e) => updatePhaseStatus(e, phase.id)}
                       />

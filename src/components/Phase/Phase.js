@@ -44,6 +44,7 @@ const Phase = (props) => {
           phaselist={phases}
           showManagerDetails={showPhaseManagerDetails}
           setPhases={setPhases}
+          currentUser={props.currentUser}
         />
       )}
 

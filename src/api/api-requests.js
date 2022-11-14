@@ -78,9 +78,6 @@ export const getAllTheLeadsFromApi = async (
       if (response.data.user !== null) {
         setLeadsList(response.data);
         setSpinnerShow(false);
-      } else {
-        alert('Login Again!!');
-        logoutRequest(authToken);
       }
     })
     .catch((error) => console.log(error));
@@ -194,6 +191,7 @@ export const phaseStatusApiRequest = (phaseId, newValue, setSpinnerShow) => {
   axios
     .patch(`${BASE_URL}/phases/${phaseId}`, { status: newValue })
     .then((res) => {
+      console.log(res);
       setSpinnerShow(false);
       alert('Successfully, Updated the Phase State');
     })

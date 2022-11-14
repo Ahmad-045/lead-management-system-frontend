@@ -18,7 +18,12 @@ const MemberPage = (props) => {
         />
         <Route
           path="lead/:id/phases"
-          element={<Phase authToken={props.authToken} />}
+          element={
+            <Phase
+              authToken={props.authToken}
+              currentUser={props.currentUser}
+            />
+          }
         />
         <Route
           path="lead/:leadId/phases/:phaseId/engineers"

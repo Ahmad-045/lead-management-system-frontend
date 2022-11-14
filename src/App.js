@@ -26,7 +26,9 @@ function App() {
   }, []);
 
   const loginUserHandler = (responseFromApiRequest) => {
+    console.log(responseFromApiRequest);
     setUser(responseFromApiRequest.data.user);
+    console.log(responseFromApiRequest);
     setAuthToken(responseFromApiRequest.headers.authorization);
 
     responseFromApiRequest.data.user !== null
