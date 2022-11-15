@@ -57,6 +57,7 @@ export const createNewLead = async (
 };
 
 export const leadToProjectConvesion = (leadId, setLeadsList) => {
+  setauthToken();
   const data = {
     lead_id: leadId,
     conversion_date: new Date(),
@@ -65,11 +66,25 @@ export const leadToProjectConvesion = (leadId, setLeadsList) => {
   axios
     .post(`${BASE_URL}/projects`, data)
     .then((res) => {
-      if (checkUnauthoriztionaStatus(res.data.status)) {
-        return;
+      if (!checkUnauthoriztionaStatus(res.data.status)) {
+        alert(messages.lead.success_updation);
+        getAllTheLeadsFromApi(setLeadsList);
       }
-      alert(messages.lead.success_updation);
-      getAllTheLeadsFromApi(setLeadsList);
     })
     .catch((error) => console.log(error));
+};
+
+export const deleteLeadRequest = (leadId, leadslist, setLeadsList) => {
+  setauthToken();
+  axios
+    .delete(`${BASE_URL}/leads/${leadId}`)
+    .then((res) => {
+      console.log(res);
+      if (!checkUnauthoriztionaStatus(res.data.status)) {
+        setLeadsList(leadslist.filter((obj) => obj.id !== leadId));
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };

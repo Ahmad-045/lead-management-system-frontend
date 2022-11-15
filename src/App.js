@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { logoutRequest } from './api/login-requests';
 import Spinner from './UI/Spinner';
+import CurrentUser from './components/CurrentUser';
 
 function App() {
   const navigate = useNavigate();
@@ -56,6 +57,8 @@ function App() {
         />
       </nav>
       <div className="p-5">
+        <CurrentUser loggedIn={loggedIn} currentUser={user} />
+
         {loggedIn && <MemberPage currentUser={user} authToken={authToken} />}
         {spinnerShow ? (
           <Spinner />

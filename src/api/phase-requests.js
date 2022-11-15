@@ -66,7 +66,6 @@ export const deletePhaseRequest = (phaseId, phaselist, setPhases) => {
     })
     .catch((error) => {
       console.log(error);
-      return false;
     });
 };
 

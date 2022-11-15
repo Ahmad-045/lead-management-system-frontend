@@ -86,7 +86,7 @@ const PhaseList = (props) => {
                   <th scope="col" className="py-3 px-6">
                     Created At
                   </th>
-                  <th scope="col" colSpan={3} className="py-3 px-6">
+                  <th scope="col" colSpan={4} className="py-3 px-6">
                     Actions
                   </th>
                 </tr>
@@ -123,21 +123,6 @@ const PhaseList = (props) => {
                     </td>
                     <td className="py-4 px-6">
                       <button
-                        className="py-1 px-3 rounded-xl ease-in-out duration-200 text-white bg-red-600"
-                        onClick={(e) => {
-                          if (
-                            window.confirm(
-                              'Are you sure you wish to delete this item?'
-                            )
-                          )
-                            deleteItem(phase.id);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                    <td className="py-4 px-6">
-                      <button
                         onClick={() => addEngieersForm(phase.id)}
                         className="border-2 border-zinc-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-zinc-600"
                       >
@@ -150,6 +135,21 @@ const PhaseList = (props) => {
                         className="border-2 border-blue-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-blue-600"
                       >
                         Phase Engineers
+                      </button>
+                    </td>
+                    <td className="py-4 px-6">
+                      <button
+                        className="py-1 px-3 rounded-xl ease-in-out duration-200 text-white bg-red-600"
+                        onClick={(e) => {
+                          if (
+                            window.confirm(
+                              'Are you sure you wish to delete this item?'
+                            )
+                          )
+                            deleteItem(phase.id);
+                        }}
+                      >
+                        Delete Phase
                       </button>
                     </td>
                   </tr>

@@ -1,7 +1,10 @@
 import React, { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { leadToProjectConvesion } from '../../api/lead-requests';
+import {
+  leadToProjectConvesion,
+  deleteLeadRequest,
+} from '../../api/lead-requests';
 
 const LeadLists = (props) => {
   const navigate = useNavigate();
@@ -9,6 +12,11 @@ const LeadLists = (props) => {
   const makeItASale = (leadId) => {
     leadToProjectConvesion(leadId, props.setLeadsList);
   };
+
+  const deleteLead = (leadId) => {
+    deleteLeadRequest(leadId, props.leadslist, props.setLeadsList);
+  };
+
   return (
     <Fragment>
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
@@ -86,6 +94,21 @@ const LeadLists = (props) => {
                       Make it a Sale
                     </button>
                   )}
+                </td>
+                <td className="py-4 px-6">
+                  <button
+                    className="py-1 px-3 rounded-xl ease-in-out duration-200 text-white bg-red-600"
+                    onClick={(e) => {
+                      if (
+                        window.confirm(
+                          'Are you sure you wish to delete this item?'
+                        )
+                      )
+                        deleteLead(lead.id);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
