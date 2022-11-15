@@ -52,9 +52,8 @@ const PhaseList = (props) => {
     setPhaseId(id);
   };
 
-  const deleteItem = (phaseId) => {
+  const deletePhase = (phaseId) => {
     deletePhaseRequest(phaseId, props.phaselist, props.setPhases);
-    console.log(props.phaselist);
   };
 
   return (
@@ -146,7 +145,7 @@ const PhaseList = (props) => {
                               'Are you sure you wish to delete this item?'
                             )
                           )
-                            deleteItem(phase.id);
+                            deletePhase(phase.id);
                         }}
                       >
                         Delete Phase

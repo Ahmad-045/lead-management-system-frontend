@@ -62,7 +62,9 @@ export const deletePhaseRequest = (phaseId, phaselist, setPhases) => {
   axios
     .delete(`${BASE_URL}/phases/${phaseId}`)
     .then((res) => {
-      setPhases(phaselist.filter((obj) => obj.id !== phaseId));
+      if (!checkUnauthoriztionaStatus(res.data.status)) {
+        setPhases(phaselist.filter((obj) => obj.id !== phaseId));
+      }
     })
     .catch((error) => {
       console.log(error);
