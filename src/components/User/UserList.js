@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { extractUsersFromApi } from '../../api/api-requests';
+
 import Modal from '../../UI/Modal';
+import Spinner from '../../UI/Spinner';
 import UserRoles from './UserRoles';
 import UserRoleForm from './UserRoleForm';
-import Spinner from '../../UI/Spinner';
-import { RolesLabel } from '../../data/roles-data';
+
+import { extractUsersFromApi } from '../../api/user-requests';
+import { RolesLabel } from '../../data/data-mapping';
 
 const UserList = () => {
   const [usersList, setUsersList] = useState([]);

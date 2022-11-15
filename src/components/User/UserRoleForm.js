@@ -1,26 +1,17 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { assignRolesToUser, extractUserRoles } from '../../api/api-requests';
-
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+
 import Spinner from '../../UI/Spinner';
-import { RolesLabel, AVAL_ROLES } from '../../data/roles-data';
+
+import { assignRolesToUser } from '../../api/user-requests';
+import { AVAL_ROLES } from '../../data/data-mapping';
 
 const animatedComponents = makeAnimated();
 
 const UserRoleForm = (props) => {
   const [newroles, setNewroles] = useState([]);
   const [spinnerShow, setSpinnerShow] = useState(false);
-  const [userRole, setUserRole] = useState([]);
-
-  useEffect(() => {
-    // const currentUserRoes = props.currentUser.roles.map((role) => ({
-    //   value: role.name,
-    //   label: RolesLabel[role.name],
-    // }));
-    // setUserRole(currentUserRoes);
-    // setUserRole(easd);
-  }, [props.currentUser]);
 
   const submitFormHandler = (e) => {
     e.preventDefault();

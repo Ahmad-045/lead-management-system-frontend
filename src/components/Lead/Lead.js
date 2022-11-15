@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { getAllTheLeadsFromApi } from '../../api/api-requests';
+
 import LeadDetails from './LeadDetails';
 import LeadLists from './LeadLists';
 import Modal from '../../UI/Modal';
 import LeadForm from './LeadForm';
 import Spinner from '../../UI/Spinner';
 
+import { getAllTheLeadsFromApi } from '../../api/lead-requests';
+
 const Lead = (props) => {
   const [leadsList, setLeadsList] = useState([]);
   const [singleleadData, setSingleleadData] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [spinnerShow, setSpinnerShow] = useState(true);
+  const userRoles = [...props.currentUser.roles.map((x) => x.name)];
 
   useEffect(() => {
     getAllTheLeadsFromApi(setLeadsList, props.authToken, setSpinnerShow);
@@ -26,9 +29,9 @@ const Lead = (props) => {
     setModalShow(true);
   };
 
-  return (
-    <div className="mt-3">
-      <h1 className="text-lg font-medium">Leads Available</h1>
+  let buttonData = '';
+  if (userRoles.includes('admin') || userRoles.includes('bd')) {
+    buttonData = (
       <button
         className="bg-blue-600 text-white font-medium px-2 py-1 rounded-md my-2"
         type="button"
@@ -36,6 +39,13 @@ const Lead = (props) => {
       >
         Create New Lead
       </button>
+    );
+  }
+
+  return (
+    <div className="mt-3">
+      <h1 className="text-lg font-medium">Leads Available</h1>
+      {buttonData}
       {spinnerShow ? (
         <Spinner />
       ) : (

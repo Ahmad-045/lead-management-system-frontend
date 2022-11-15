@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { extractManagersForForm, createNewPhase } from '../../api/api-requests';
 import Select from 'react-select';
+
 import Spinner from '../../UI/Spinner';
+
+import { createNewPhase } from '../../api/phase-requests';
+import { extractManagersForForm } from '../../api/user-requests';
+import { messages } from '../../data/constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -29,7 +33,7 @@ const PhaseForm = (props) => {
     const isEmpty = Object.values(formData).every((x) => x !== '');
 
     if (!isEmpty) {
-      alert('Fill in all the required Fields...');
+      alert(messages.form.required);
       return;
     }
 
@@ -38,7 +42,6 @@ const PhaseForm = (props) => {
       props.leadId,
       props.setModalShow,
       props.setPhases,
-      props.id,
       setSpinnerShow
     );
   };

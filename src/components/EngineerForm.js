@@ -1,12 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import {
-  extractEngineersForForm,
-  assignEnginnersApiRequest,
-} from '../api/api-requests';
-
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+
 import Spinner from '../UI/Spinner';
+
+import { extractEngineersForForm } from '../api/user-requests';
+import { assignEnginnersApiRequest } from '../api/phase-requests';
 
 const animatedComponents = makeAnimated();
 

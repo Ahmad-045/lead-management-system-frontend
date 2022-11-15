@@ -4,7 +4,7 @@ import GuestPage from './pages/GuestPage';
 import Navigation from './components/Navigation';
 import { useNavigate } from 'react-router-dom';
 
-import { logoutRequest } from './api/api-requests';
+import { logoutRequest } from './api/login-requests';
 import Spinner from './UI/Spinner';
 
 function App() {
@@ -29,19 +29,21 @@ function App() {
   }, []);
 
   const loginUserHandler = (responseFromApiRequest) => {
-    // console.log(responseFromApiRequest);
     setUser(responseFromApiRequest.data.user);
     setAuthToken(responseFromApiRequest.headers.authorization);
 
     responseFromApiRequest.data.user !== null
       ? setLoggedIn(true)
       : setLoggedIn(false);
+
+    navigate('/lead');
   };
 
   const logoutUserHandler = () => {
     logoutRequest(authToken, setAuthToken, setUser, setLoggedIn);
-    navigate('/');
-    navigate(0);
+    navigate('/lead');
+
+    // navigate(0);
   };
 
   return (

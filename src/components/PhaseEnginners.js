@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { extractEngineersOfPhase } from '../api/api-requests';
+
 import Spinner from '../UI/Spinner';
+
+import { extractEngineersOfPhase } from '../api/phase-requests';
 
 const PhaseEnginners = () => {
   const { phaseId } = useParams();
@@ -10,7 +12,7 @@ const PhaseEnginners = () => {
 
   useEffect(() => {
     extractEngineersOfPhase(phaseId, setEngineers, setSpinnerShow);
-  }, []);
+  }, [phaseId]);
 
   const engineersData = (
     <div>

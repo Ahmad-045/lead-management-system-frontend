@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { loginRequest } from '../api/api-requests';
+import { loginRequest } from '../api/login-requests';
+import { messages } from '../data/constants';
 
 const LoginForm = (props) => {
   const [email, setEmail] = useState('');
@@ -9,7 +10,7 @@ const LoginForm = (props) => {
     e.preventDefault();
 
     if (email === '' || password === '') {
-      alert('Please fill in all fields');
+      alert(messages.form.required);
       return;
     }
 

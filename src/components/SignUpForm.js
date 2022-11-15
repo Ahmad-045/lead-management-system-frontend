@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import { registerNewUserApiRequest } from '../api/api-requests';
 import InputMask from 'react-input-mask';
+
 import Spinner from '../UI/Spinner';
+
+import { registerNewUserApiRequest } from '../api/login-requests';
+import { messages } from '../data/constants';
 
 const defaultFormState = {
   username: '',
@@ -21,17 +24,17 @@ const SignUpForm = (props) => {
     const isEmpty = Object.values(formData).every((x) => x !== '');
 
     if (!isEmpty) {
-      alert('Fill in all the required Fields...');
+      alert(messages.form.required);
       return;
     }
 
     if (formData.password !== formData.password_confirmation) {
-      alert('Password and password confimation are not matched');
+      alert(messages.form.pass_not_matched);
       return;
     }
 
     if (formData.password.length < 6) {
-      alert('Password not match the minimum length criteria');
+      alert(messages.form.pass_length_error);
       return;
     }
 
@@ -39,7 +42,7 @@ const SignUpForm = (props) => {
       /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
     );
     if (!pattern.test(formData.contact) || formData.contact.length !== 12) {
-      alert('Please enter valid phone number.');
+      alert(messages.form.not_valid_number);
       return;
     }
 

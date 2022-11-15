@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { createNewLead } from '../../api/api-requests';
+import InputMask from 'react-input-mask';
+
 import Spinner from '../../UI/Spinner';
+
+import { createNewLead } from '../../api/lead-requests';
+import { messages } from '../../data/constants';
 
 const defaultFormState = {
   project_name: '',
@@ -22,7 +26,18 @@ const LeadForm = (props) => {
     const isEmpty = Object.values(formData).every((x) => x !== '');
 
     if (!isEmpty) {
-      alert('Fill in all the required Fields...');
+      alert(messages.form.required);
+      return;
+    }
+
+    var pattern = new RegExp(
+      /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
+    );
+    if (
+      !pattern.test(formData.client_contact) ||
+      formData.client_contact.length !== 12
+    ) {
+      alert(messages.form.not_valid_number);
       return;
     }
 
@@ -129,12 +144,12 @@ const LeadForm = (props) => {
                 >
                   Client Contact
                 </label>
-                <input
+                <InputMask
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-password"
-                  type="text"
+                  mask="9999-9999999"
                   name="client_contact"
                   onChange={inputFieldChangeHandler}
+                  value={formData.client_contact}
                 />
               </div>
             </div>
@@ -170,7 +185,9 @@ const LeadForm = (props) => {
                     name="test_type"
                     onChange={inputFieldChangeHandler}
                   >
-                    <option value={1}>Interview</option>
+                    <option defaultValue value={1}>
+                      Interview
+                    </option>
                     <option value={2}>Test Project</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">

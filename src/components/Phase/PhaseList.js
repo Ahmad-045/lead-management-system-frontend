@@ -1,11 +1,17 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import Select from 'react-select';
-import { phaseStatusApiRequest } from '../../api/api-requests';
-import Modal from '../../UI/Modal';
-import EngineerForm from '../EngineerForm';
 import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
+
+import EngineerForm from '../EngineerForm';
+import Modal from '../../UI/Modal';
 import Spinner from '../../UI/Spinner';
-import { STATUS_LIST } from '../../data/roles-data';
+
+import {
+  phaseStatusApiRequest,
+  deletePhaseRequest,
+} from '../../api/phase-requests';
+
+import { STATUS_LIST } from '../../data/data-mapping';
 
 const PhaseList = (props) => {
   const navigate = useNavigate();
@@ -21,7 +27,7 @@ const PhaseList = (props) => {
         setCanUpdate(false);
       }
     });
-  }, []);
+  }, [props.currentUser]);
 
   const reshapePhaseStatus = (status) => {
     let obj = STATUS_LIST.find((o) => o.label === status);
@@ -44,6 +50,11 @@ const PhaseList = (props) => {
   const addEngieersForm = (id) => {
     setModalShow(true);
     setPhaseId(id);
+  };
+
+  const deleteItem = (phaseId) => {
+    deletePhaseRequest(phaseId, props.phaselist, props.setPhases);
+    console.log(props.phaselist);
   };
 
   return (
@@ -108,6 +119,21 @@ const PhaseList = (props) => {
                         className="border-2 border-blue-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-blue-600"
                       >
                         Manager
+                      </button>
+                    </td>
+                    <td className="py-4 px-6">
+                      <button
+                        className="py-1 px-3 rounded-xl ease-in-out duration-200 text-white bg-red-600"
+                        onClick={(e) => {
+                          if (
+                            window.confirm(
+                              'Are you sure you wish to delete this item?'
+                            )
+                          )
+                            deleteItem(phase.id);
+                        }}
+                      >
+                        Delete
                       </button>
                     </td>
                     <td className="py-4 px-6">
