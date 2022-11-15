@@ -41,6 +41,7 @@ function App() {
   const logoutUserHandler = () => {
     logoutRequest(authToken, setAuthToken, setUser, setLoggedIn);
     navigate('/');
+    navigate(0);
   };
 
   return (

@@ -20,6 +20,7 @@ export const loginRequest = async (
   axios
     .post(`${BASE_URL}/users/sign_in`, data)
     .then((response) => {
+      console.log(response);
       if (checkUnauthoriztionaStatus(response.data.status)) {
         setSpinnerShow(false);
         return;
@@ -332,6 +333,9 @@ export const leadToProjectConvesion = (leadId, setLeadsList) => {
   axios
     .post(`${BASE_URL}/projects`, data)
     .then((res) => {
+      if (checkUnauthoriztionaStatus(res.data.status)) {
+        return;
+      }
       alert('successfully! updated the Leads');
       getAllTheLeadsFromApi(setLeadsList);
     })
