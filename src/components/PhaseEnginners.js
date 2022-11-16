@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import Spinner from '../UI/Spinner';
 
 import { extractEngineersOfPhase } from '../api/phase-requests';
-import Comments from './Comments';
+import Comments from './Comment/Comments';
 
 const PhaseEnginners = () => {
   const { phaseId } = useParams();

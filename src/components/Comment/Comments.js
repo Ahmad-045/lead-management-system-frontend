@@ -1,12 +1,29 @@
 import React, { useState, useEffect } from 'react';
 
 import ReactTimeAgo from 'react-time-ago';
+import Modal from '../../UI/Modal';
 
-import { extractCommentRequest } from '../api/comment-requests';
+import { extractCommentRequest } from '../../api/comment-requests';
+import CommentForm from './CommentForm';
+
+const defaultCommentType = {
+  commentable_id: '',
+  commentable_type: '',
+};
 
 const Comments = (props) => {
   const [commentsList, setCommentsList] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
   const [spinnerShow, setSpinnerShow] = useState(false);
+  const [commentState, setCommentState] = useState(defaultCommentType);
+
+  const setTypesToCreateComment = (id) => {
+    setCommentState({
+      commentable_id: id,
+      commentable_type: props.commentType,
+    });
+    setModalShow(true);
+  };
 
   useEffect(() => {
     setSpinnerShow(false);
@@ -16,12 +33,13 @@ const Comments = (props) => {
       setCommentsList,
       setSpinnerShow
     );
-  }, [props.id, props.commentType]);
+  }, [props.id, props.commentType, commentState]);
 
   return (
     <div className="mt-4">
       <h1 className="text-lg font-medium">Comments </h1>
       <button
+        onClick={() => setTypesToCreateComment(props.id)}
         className="bg-blue-600 text-white font-medium px-2 py-1 rounded-md my-2"
         type="button"
       >
@@ -54,6 +72,15 @@ const Comments = (props) => {
             </div>
           ))}
         </div>
+      )}
+      {modalShow && (
+        <Modal onhideDetails={() => setModalShow(false)}>
+          <CommentForm
+            setModalShow={setModalShow}
+            commentState={commentState}
+            setCommentsList={setCommentsList}
+          />
+        </Modal>
       )}
     </div>
   );

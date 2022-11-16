@@ -19,8 +19,45 @@ export const extractCommentRequest = (
       setCommentsList(res.data);
       setSpinnerShow(true);
     })
-    .catch((eror) => {
-      console.log(eror);
+    .catch((error) => {
+      console.log(error);
       setSpinnerShow(true);
+    });
+};
+
+export const createCommentRequest = (
+  commentState,
+  setCommentsList,
+  setSpinnerShow,
+  setModalShow
+) => {
+  setauthToken();
+  const commentTypeForUrl = commentState.commentable_type;
+  commentState.commentable_type = commentState.commentable_type.replaceAll(
+    '/',
+    ''
+  );
+
+  commentState.commentable_id = parseInt(commentState.commentable_id);
+  axios
+    .post(
+      `${BASE_URL}${commentTypeForUrl}${commentState.commentable_id}/comments`,
+      { data: commentState }
+    )
+    .then((res) => {
+      extractCommentRequest(
+        commentTypeForUrl,
+        commentState.commentable_id,
+        setCommentsList,
+        setSpinnerShow
+      );
+      console.log(res);
+      setSpinnerShow(false);
+      setModalShow(false);
+    })
+    .catch((error) => {
+      setSpinnerShow(false);
+      console.log(error);
+      setModalShow(false);
     });
 };

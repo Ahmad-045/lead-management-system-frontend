@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
-import Comments from '../Comments';
+import Comments from '../Comment/Comments';
 import EngineerForm from '../EngineerForm';
 import Modal from '../../UI/Modal';
 import Spinner from '../../UI/Spinner';
