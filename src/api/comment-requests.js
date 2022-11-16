@@ -17,11 +17,11 @@ export const extractCommentRequest = (
     )
     .then((res) => {
       setCommentsList(res.data);
-      setSpinnerShow(true);
+      setSpinnerShow(false);
     })
     .catch((error) => {
       console.log(error);
-      setSpinnerShow(true);
+      setSpinnerShow(false);
     });
 };
 

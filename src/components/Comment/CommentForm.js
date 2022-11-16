@@ -5,7 +5,7 @@ import { createCommentRequest } from '../../api/comment-requests';
 
 const CommentForm = (props) => {
   const [content, setContent] = useState('');
-  const [spinnerShow, setSpinnerShow] = useState(true);
+  const [spinnerShow, setSpinnerShow] = useState(false);
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
@@ -29,7 +29,9 @@ const CommentForm = (props) => {
   };
   return (
     <div>
-      {spinnerShow && (
+      {spinnerShow ? (
+        <Spinner />
+      ) : (
         <Fragment>
           <h1 className="mb-4 font-medium text-xl underline">
             Create New Comment

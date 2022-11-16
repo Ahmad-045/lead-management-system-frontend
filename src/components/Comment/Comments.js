@@ -5,6 +5,7 @@ import Modal from '../../UI/Modal';
 
 import { extractCommentRequest } from '../../api/comment-requests';
 import CommentForm from './CommentForm';
+import Spinner from '../../UI/Spinner';
 
 const defaultCommentType = {
   commentable_id: '',
@@ -26,7 +27,7 @@ const Comments = (props) => {
   };
 
   useEffect(() => {
-    setSpinnerShow(false);
+    setSpinnerShow(true);
     extractCommentRequest(
       props.commentType,
       props.id,
@@ -45,7 +46,9 @@ const Comments = (props) => {
       >
         Add New Comment
       </button>
-      {spinnerShow && (
+      {spinnerShow ? (
+        <Spinner />
+      ) : (
         <div className="mt-1">
           {commentsList.map((comment, index) => (
             <div
