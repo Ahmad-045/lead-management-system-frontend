@@ -2,11 +2,7 @@ import axios from 'axios';
 import { setauthToken, checkUnauthoriztionaStatus } from './helper-functions';
 import { BASE_URL, messages } from '../data/constants';
 
-export const getAllTheLeadsFromApi = async (
-  setLeadsList,
-  authToken,
-  setSpinnerShow
-) => {
+export const getAllTheLeadsFromApi = async (setLeadsList, setSpinnerShow) => {
   setauthToken();
   axios
     .get(`${BASE_URL}/leads`)
@@ -79,7 +75,6 @@ export const deleteLeadRequest = (leadId, leadslist, setLeadsList) => {
   axios
     .delete(`${BASE_URL}/leads/${leadId}`)
     .then((res) => {
-      console.log(res);
       if (!checkUnauthoriztionaStatus(res.data.status)) {
         setLeadsList(leadslist.filter((obj) => obj.id !== leadId));
       }

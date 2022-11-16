@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Spinner from '../UI/Spinner';
 
 import { extractEngineersOfPhase } from '../api/phase-requests';
+import Comments from './Comments';
 
 const PhaseEnginners = () => {
   const { phaseId } = useParams();
@@ -43,6 +44,7 @@ const PhaseEnginners = () => {
         Engineers working on this Phase
       </h1>
       {spinnerShow ? <Spinner /> : engineersData}
+      <Comments id={phaseId} commentType="/phases/" />
     </div>
   );
 };

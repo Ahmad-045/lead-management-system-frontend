@@ -56,6 +56,7 @@ const Phase = (props) => {
           showManagerDetails={showPhaseManagerDetails}
           setPhases={setPhases}
           currentUser={props.currentUser}
+          id={id}
         />
       )}
 

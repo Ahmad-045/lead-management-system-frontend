@@ -16,8 +16,8 @@ const Lead = (props) => {
   const userRoles = [...props.currentUser.roles.map((x) => x.name)];
 
   useEffect(() => {
-    getAllTheLeadsFromApi(setLeadsList, props.authToken, setSpinnerShow);
-  }, [props.authToken]);
+    getAllTheLeadsFromApi(setLeadsList, setSpinnerShow);
+  }, []);
 
   const showLeadDetailsHandler = (lead) => {
     setSingleleadData(lead);

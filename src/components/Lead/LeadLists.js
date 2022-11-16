@@ -79,7 +79,7 @@ const LeadLists = (props) => {
                     onClick={() => navigate(`${lead.id}/phases`)}
                     className="border-2 border-zinc-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-zinc-600"
                   >
-                    Phase Details
+                    Phases & Comments
                   </button>
                 </td>
                 <td className="py-4 px-6">

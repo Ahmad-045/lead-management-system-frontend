@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
+import Comments from '../Comments';
 import EngineerForm from '../EngineerForm';
 import Modal from '../../UI/Modal';
 import Spinner from '../../UI/Spinner';
@@ -74,6 +75,9 @@ const PhaseList = (props) => {
                     Sr No.
                   </th>
                   <th scope="col" className="py-3 px-6">
+                    Phase Name
+                  </th>
+                  <th scope="col" className="py-3 px-6">
                     Start Date
                   </th>
                   <th scope="col" className="py-3 px-6">
@@ -99,6 +103,7 @@ const PhaseList = (props) => {
                     <th className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {phase.id}
                     </th>
+                    <td className="py-4 px-6">{phase.phase_name}</td>
                     <td className="py-4 px-6">{phase.start_date}</td>
                     <td className="py-4 px-6">{phase.end_date}</td>
                     <td className="py-4 px-6">
@@ -133,23 +138,25 @@ const PhaseList = (props) => {
                         onClick={() => navigate(`${phase.id}/engineers`)}
                         className="border-2 border-blue-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-blue-600"
                       >
-                        Phase Engineers
+                        Engineers & Comments
                       </button>
                     </td>
                     <td className="py-4 px-6">
-                      <button
-                        className="py-1 px-3 rounded-xl ease-in-out duration-200 text-white bg-red-600"
-                        onClick={(e) => {
-                          if (
-                            window.confirm(
-                              'Are you sure you wish to delete this item?'
+                      {!canUpdate && (
+                        <button
+                          className="py-1 px-3 rounded-xl ease-in-out duration-200 text-white bg-red-600"
+                          onClick={(e) => {
+                            if (
+                              window.confirm(
+                                'Are you sure you wish to delete this item?'
+                              )
                             )
-                          )
-                            deletePhase(phase.id);
-                        }}
-                      >
-                        Delete Phase
-                      </button>
+                              deletePhase(phase.id);
+                          }}
+                        >
+                          Delete Phase
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -158,6 +165,8 @@ const PhaseList = (props) => {
           )}
         </div>
       )}
+
+      <Comments id={props.id} commentType="/leads/" />
 
       {modalShow && (
         <Modal onhideDetails={() => setModalShow(false)}>

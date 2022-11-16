@@ -14,8 +14,11 @@ const CurrentUser = (props) => {
                   No Role Assigned Yet
                 </span>
               ) : (
-                props.currentUser?.roles.map((role) => (
-                  <p className="text-xs bg-gray-200 p-1 rounded-md">
+                props.currentUser?.roles.map((role, index) => (
+                  <p
+                    key={role + index}
+                    className="text-xs bg-gray-200 p-1 rounded-md"
+                  >
                     {role.name}
                   </p>
                 ))

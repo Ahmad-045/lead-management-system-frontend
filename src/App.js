@@ -42,7 +42,7 @@ function App() {
 
   const logoutUserHandler = () => {
     logoutRequest(authToken, setAuthToken, setUser, setLoggedIn);
-    navigate('/lead');
+    navigate('/');
 
     // navigate(0);
   };
