@@ -20,14 +20,13 @@ const PhaseList = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const [phaseId, setPhaseId] = useState(null);
   const [spinnerShow, setSpinnerShow] = useState(false);
-  const [canUpdate, setCanUpdate] = useState(true);
+  const [canUpdate, setCanUpdate] = useState(false);
 
   useEffect(() => {
-    props.currentUser.roles.map((role) => {
-      if (role.name !== 'engineer') {
-        setCanUpdate(false);
-      }
-    });
+    let obj = props.currentUser.roles.find((role) => role.name === 'engineer');
+    if (!obj) {
+      setCanUpdate(true);
+    }
   }, [props.currentUser]);
 
   const reshapePhaseStatus = (status) => {
@@ -108,7 +107,7 @@ const PhaseList = (props) => {
                     <td className="py-4 px-6">{phase.end_date}</td>
                     <td className="py-4 px-6">
                       <Select
-                        isDisabled={canUpdate}
+                        isDisabled={!canUpdate}
                         options={STATUS_LIST}
                         defaultValue={reshapePhaseStatus(phase.status)}
                         onChange={(e) => updatePhaseStatus(e, phase.id)}
@@ -142,7 +141,7 @@ const PhaseList = (props) => {
                       </button>
                     </td>
                     <td className="py-4 px-6">
-                      {!canUpdate && (
+                      {canUpdate && (
                         <button
                           className="py-1 px-3 rounded-xl ease-in-out duration-200 text-white bg-red-600"
                           onClick={(e) => {

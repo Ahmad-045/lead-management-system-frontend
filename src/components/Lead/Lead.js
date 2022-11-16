@@ -53,6 +53,7 @@ const Lead = (props) => {
           leadslist={leadsList}
           showLeadDetails={showLeadDetailsHandler}
           setLeadsList={setLeadsList}
+          setSpinnerShow={setSpinnerShow}
         />
       )}
 

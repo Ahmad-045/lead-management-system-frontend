@@ -47,7 +47,10 @@ export const phaseStatusApiRequest = (phaseId, newValue, setSpinnerShow) => {
   axios
     .patch(`${BASE_URL}/phases/${phaseId}`, { status: newValue })
     .then((res) => {
-      console.log(res);
+      if (checkUnauthoriztionaStatus(res.data.status)) {
+        setSpinnerShow(false);
+        return;
+      }
       setSpinnerShow(false);
       alert(messages.phase.success_update_status);
     })

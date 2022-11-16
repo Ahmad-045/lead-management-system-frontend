@@ -44,7 +44,7 @@ export const createNewLead = async (
       alert(messages.lead.success_creation);
       setSpinnerShow(false);
       setModalShow(false);
-      getAllTheLeadsFromApi(setLeadsList);
+      getAllTheLeadsFromApi(setLeadsList, setSpinnerShow);
     })
     .catch((error) => {
       console.log(error);
@@ -52,7 +52,11 @@ export const createNewLead = async (
     });
 };
 
-export const leadToProjectConvesion = (leadId, setLeadsList) => {
+export const leadToProjectConvesion = (
+  leadId,
+  setLeadsList,
+  setSpinnerShow
+) => {
   setauthToken();
   const data = {
     lead_id: leadId,
@@ -64,7 +68,7 @@ export const leadToProjectConvesion = (leadId, setLeadsList) => {
     .then((res) => {
       if (!checkUnauthoriztionaStatus(res.data.status)) {
         alert(messages.lead.success_updation);
-        getAllTheLeadsFromApi(setLeadsList);
+        getAllTheLeadsFromApi(setLeadsList, setSpinnerShow);
       }
     })
     .catch((error) => console.log(error));

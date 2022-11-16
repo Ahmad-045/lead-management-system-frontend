@@ -10,7 +10,7 @@ const LeadLists = (props) => {
   const navigate = useNavigate();
 
   const makeItASale = (leadId) => {
-    leadToProjectConvesion(leadId, props.setLeadsList);
+    leadToProjectConvesion(leadId, props.setLeadsList, props.setSpinnerShow);
   };
 
   const deleteLead = (leadId) => {
