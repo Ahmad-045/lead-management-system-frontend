@@ -35,6 +35,7 @@ const UserRoleForm = (props) => {
           <h1 className="mb-5 font-medium underline text-xl">
             Available Roles in the Company
           </h1>
+          {console.log(props.userRole)}
           <Select
             defaultValue={props.userRole}
             options={AVAL_ROLES}

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import Modal from '../../UI/Modal';
 import Spinner from '../../UI/Spinner';
-import UserRoles from './UserRoles';
+
+import UserRolesComponent from './UserRolesComponent';
 import UserRoleForm from './UserRoleForm';
 
 import {
@@ -19,12 +20,6 @@ const UserList = (props) => {
   const [spinnerShow, setSpinnerShow] = useState(true);
   const [userRole, setUserRole] = useState([]);
 
-  const showUserRoles = (user) => {
-    setCurrentUser(user);
-    setShowForm(false);
-    setModalShow(true);
-  };
-
   const showFormForRole = (user) => {
     setCurrentUser(user);
     setShowForm(true);
@@ -40,7 +35,7 @@ const UserList = (props) => {
     setUserRole(currentUserRoes);
   };
 
-  const deleteUser = async (userId) => {
+  const deleteUser = (userId) => {
     deleteUserRequest(userId, usersList, setUsersList);
   };
 
@@ -62,10 +57,10 @@ const UserList = (props) => {
               <th scope="col" className="py-3 px-6">
                 Email
               </th>
-              <th scope="col" colSpan={2} className="py-3 px-6">
+              <th scope="col" className="py-3 px-6">
                 Roles
               </th>
-              <th scope="col" className="py-3 px-6">
+              <th scope="col" colSpan={2} className="py-3 px-6">
                 Action
               </th>
             </tr>
@@ -81,12 +76,7 @@ const UserList = (props) => {
                 </th>
                 <td className="py-4 px-6">{user.email}</td>
                 <td className="py-4 px-6">
-                  <button
-                    onClick={() => showUserRoles(user)}
-                    className="border-2 border-blue-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-blue-600"
-                  >
-                    Assigned Roles
-                  </button>
+                  <UserRolesComponent user={user} />
                 </td>
                 <td className="py-4 px-6">
                   <button
@@ -120,7 +110,6 @@ const UserList = (props) => {
       )}
       {modalShow && (
         <Modal onhideDetails={() => setModalShow(false)}>
-          {!showForm && <UserRoles currentUser={currentUser} />}
           {showForm && (
             <UserRoleForm
               currentUser={currentUser}

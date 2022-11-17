@@ -5,7 +5,7 @@ import Select from 'react-select';
 import Spinner from '../../UI/Spinner';
 
 import { createNewPhase } from '../../api/phase-requests';
-import { extractManagersForForm } from '../../api/user-requests';
+import { extractUserWithRoleForForm } from '../../api/user-requests';
 import { messages } from '../../data/constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -23,7 +23,7 @@ const PhaseForm = (props) => {
   const [spinnerShow, setSpinnerShow] = useState(true);
 
   useEffect(() => {
-    extractManagersForForm(setManagers, setSpinnerShow);
+    extractUserWithRoleForForm('manager', setManagers, setSpinnerShow);
   }, []);
 
   const formSubmitHandler = (e) => {

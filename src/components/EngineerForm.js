@@ -4,7 +4,7 @@ import makeAnimated from 'react-select/animated';
 
 import Spinner from '../UI/Spinner';
 
-import { extractEngineersForForm } from '../api/user-requests';
+import { extractUserWithRoleForForm } from '../api/user-requests';
 import { assignEnginnersApiRequest } from '../api/phase-requests';
 
 const animatedComponents = makeAnimated();
@@ -15,7 +15,7 @@ const EngineerForm = (props) => {
   const [spinnerShow, setSpinnerShow] = useState(true);
 
   useEffect(() => {
-    extractEngineersForForm(setEngineers, setSpinnerShow);
+    extractUserWithRoleForForm('engineer', setEngineers, setSpinnerShow);
   }, []);
 
   const submitFormHandler = (e) => {
