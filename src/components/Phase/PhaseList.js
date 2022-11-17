@@ -24,10 +24,9 @@ const PhaseList = (props) => {
 
   useEffect(() => {
     props.currentUser.roles.map((role) => {
-      if (role.name === 'engineer') {
+      if (role.name !== 'engineer') {
         setCanUpdate(true);
       }
-      return null;
     });
   }, [props.currentUser]);
 
