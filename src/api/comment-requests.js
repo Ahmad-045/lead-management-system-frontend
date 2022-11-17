@@ -31,6 +31,7 @@ export const createCommentRequest = (
   setSpinnerShow,
   setModalShow
 ) => {
+  console.log(commentState);
   setauthToken();
   const commentTypeForUrl = commentState.commentable_type;
   commentState.commentable_type = commentState.commentable_type.replaceAll(

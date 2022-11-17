@@ -85,3 +85,18 @@ export const extractUserRoles = (user) => {
     })
     .catch((error) => {});
 };
+
+export const deleteUserRequest = async (userId, usersList, setUsersList) => {
+  setauthToken();
+  axios
+    .delete(`${BASE_URL}/users/${userId}`)
+    .then((res) => {
+      if (checkUnauthoriztionaStatus(res.data.status)) {
+        return;
+      }
+      setUsersList(usersList.filter((obj) => obj.id !== userId));
+    })
+    .catch((error) => console.log(error));
+};
+
+// moiz@gamil.com

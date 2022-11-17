@@ -30,7 +30,10 @@ const MemberPage = (props) => {
           path="lead/:leadId/phases/:phaseId/engineers"
           element={<PhaseEnginners />}
         />
-        <Route path="/users" element={<UserList />} />
+        <Route
+          path="/users"
+          element={<UserList currentUser={props.currentUser} />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

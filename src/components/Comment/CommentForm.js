@@ -2,23 +2,33 @@ import React, { Fragment, useState } from 'react';
 
 import Spinner from '../../UI/Spinner';
 import { createCommentRequest } from '../../api/comment-requests';
+import { messages } from '../../data/constants';
 
 const CommentForm = (props) => {
-  const [content, setContent] = useState('');
   const [spinnerShow, setSpinnerShow] = useState(false);
+  const [content, setContent] = useState('');
+  // const [file, setFile] = useState(null);
+  // const [formData, setFormData] = useState(defaultCommentState);
+
+  const onImageChange = (e) => {
+    e.persist();
+    // setFile(e.target.image.files[0]);
+  };
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
 
     if (content === '') {
-      alert('Comment Body is empty');
+      alert(messages.form.required);
       return;
     }
 
     const data = {
       ...props.commentState,
       content,
+      // image: file,
     };
+
     setSpinnerShow(true);
     createCommentRequest(
       data,
@@ -27,6 +37,7 @@ const CommentForm = (props) => {
       props.setModalShow
     );
   };
+
   return (
     <div>
       {spinnerShow ? (
@@ -50,13 +61,23 @@ const CommentForm = (props) => {
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-password"
                   type="email"
-                  name="client_email"
+                  name="content"
                   onChange={(e) => setContent(e.target.value)}
                 />
               </div>
             </div>
+            {/* <label className="flex gap-2">
+              Comment Image:
+              <input
+                type="file"
+                name="image"
+                accept="image/png, image/gif, image/jpeg"
+                id="image"
+                onChange={onImageChange}
+              />
+            </label> */}
             <button
-              className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-500 ease-in-out duration-100"
+              className="float-right bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-500 ease-in-out duration-100"
               type="submit"
             >
               Submit

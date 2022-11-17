@@ -23,10 +23,12 @@ const PhaseList = (props) => {
   const [canUpdate, setCanUpdate] = useState(false);
 
   useEffect(() => {
-    let obj = props.currentUser.roles.find((role) => role.name === 'engineer');
-    if (!obj) {
-      setCanUpdate(true);
-    }
+    props.currentUser.roles.map((role) => {
+      if (role.name === 'engineer') {
+        setCanUpdate(true);
+      }
+      return null;
+    });
   }, [props.currentUser]);
 
   const reshapePhaseStatus = (status) => {

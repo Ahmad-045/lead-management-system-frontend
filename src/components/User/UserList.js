@@ -5,10 +5,13 @@ import Spinner from '../../UI/Spinner';
 import UserRoles from './UserRoles';
 import UserRoleForm from './UserRoleForm';
 
-import { extractUsersFromApi } from '../../api/user-requests';
+import {
+  extractUsersFromApi,
+  deleteUserRequest,
+} from '../../api/user-requests';
 import { RolesLabel } from '../../data/data-mapping';
 
-const UserList = () => {
+const UserList = (props) => {
   const [usersList, setUsersList] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -37,6 +40,10 @@ const UserList = () => {
     setUserRole(currentUserRoes);
   };
 
+  const deleteUser = async (userId) => {
+    deleteUserRequest(userId, usersList, setUsersList);
+  };
+
   useEffect(() => {
     extractUsersFromApi(setUsersList, setSpinnerShow);
   }, []);
@@ -57,6 +64,9 @@ const UserList = () => {
               </th>
               <th scope="col" colSpan={2} className="py-3 px-6">
                 Roles
+              </th>
+              <th scope="col" className="py-3 px-6">
+                Action
               </th>
             </tr>
           </thead>
@@ -84,6 +94,23 @@ const UserList = () => {
                     className="border-2 border-blue-600 py-1 px-3 rounded-xl ease-in-out duration-200 hover:text-white hover:bg-blue-600"
                   >
                     Add / Remove Role
+                  </button>
+                </td>
+                <td className="py-4 px-6">
+                  <button
+                    className={`py-1 px-3 rounded-xl ease-in-out duration-200 text-white bg-red-600 ${
+                      props.currentUser.id === user.id ? 'hidden' : 'block'
+                    }`}
+                    onClick={(e) => {
+                      if (
+                        window.confirm(
+                          'Are you sure you wish to delete this user?'
+                        )
+                      )
+                        deleteUser(user.id);
+                    }}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
