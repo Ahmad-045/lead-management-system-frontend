@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
@@ -13,8 +13,11 @@ import {
 } from '../../api/phase-requests';
 
 import { STATUS_LIST } from '../../data/data-mapping';
+import UserContext from '../../store/user-context';
 
 const PhaseList = (props) => {
+  const userCtx = useContext(UserContext);
+
   const navigate = useNavigate();
 
   const [modalShow, setModalShow] = useState(false);
@@ -23,29 +26,31 @@ const PhaseList = (props) => {
   const [canUpdate, setCanUpdate] = useState(false);
 
   useEffect(() => {
-    props.currentUser.roles.map((role) => {
+    userCtx.user.roles.map((role) => {
       if (role.name !== 'engineer') {
         setCanUpdate(true);
       }
     });
-  }, [props.currentUser]);
+  }, [userCtx.user]);
 
   const reshapePhaseStatus = (status) => {
     let obj = STATUS_LIST.find((o) => o.label === status);
     return obj;
   };
 
-  const updatePhaseStatus = (e, phaseId) => {
+  const updatePhaseStatus = async (e, phaseId) => {
     setSpinnerShow(true);
-    phaseStatusApiRequest(phaseId, parseInt(e.value), setSpinnerShow);
-    props.setPhases(
-      props.phaselist.map((obj) => {
-        if (obj.id === phaseId) {
-          return { ...obj, status: e.label };
-        }
-        return obj;
-      })
-    );
+    const response = await phaseStatusApiRequest(phaseId, parseInt(e.value));
+
+    if (response?.status === 200) {
+      const changedPhaseIndex = props.phaselist.findIndex(
+        (obj) => obj.id === phaseId
+      );
+      const newlist = props.phaselist;
+      newlist[changedPhaseIndex] = response.data;
+      props.setPhases(newlist);
+    }
+    setSpinnerShow(false);
   };
 
   const addEngieersForm = (id) => {
@@ -53,8 +58,11 @@ const PhaseList = (props) => {
     setPhaseId(id);
   };
 
-  const deletePhase = (phaseId) => {
-    deletePhaseRequest(phaseId, props.phaselist, props.setPhases);
+  const deletePhase = async (phaseId) => {
+    const response = await deletePhaseRequest(phaseId);
+    if (response?.status === 200) {
+      props.setPhases(props.phaselist.filter((obj) => obj.id !== phaseId));
+    }
   };
 
   return (

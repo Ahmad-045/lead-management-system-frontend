@@ -6,6 +6,7 @@ import Spinner from '../../UI/Spinner';
 
 import { createNewPhase } from '../../api/phase-requests';
 import { extractUserWithRoleForForm } from '../../api/user-requests';
+import { matchUserToSelectFields } from '../../api/helper-functions';
 import { messages } from '../../data/constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -15,6 +16,7 @@ const defaultFormState = {
   start_date: '',
   end_date: '',
   manager_id: '',
+  lead_id: '',
 };
 
 const PhaseForm = (props) => {
@@ -23,13 +25,22 @@ const PhaseForm = (props) => {
   const [spinnerShow, setSpinnerShow] = useState(true);
 
   useEffect(() => {
-    extractUserWithRoleForForm('manager', setManagers, setSpinnerShow);
+    const extractManagersHandler = async () => {
+      const response = await extractUserWithRoleForForm('manager');
+      console.log(response);
+      if (response.status === 200) {
+        setManagers(matchUserToSelectFields(response.data));
+      }
+      setSpinnerShow(false);
+    };
+    extractManagersHandler();
   }, []);
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
     setSpinnerShow(true);
 
+    formData.lead_id = parseInt(props.leadId);
     const isEmpty = Object.values(formData).every((x) => x !== '');
 
     if (!isEmpty) {
@@ -37,13 +48,16 @@ const PhaseForm = (props) => {
       return;
     }
 
-    createNewPhase(
-      formData,
-      props.leadId,
-      props.setModalShow,
-      props.setPhases,
-      setSpinnerShow
-    );
+    createNewPhaseHandler();
+  };
+
+  const createNewPhaseHandler = async () => {
+    const respone = await createNewPhase(formData);
+    if (respone.status === 201) {
+      props.setPhases((prevState) => [...prevState, respone.data]);
+    }
+    setSpinnerShow(false);
+    props.setModalShow(false);
   };
 
   const inputFieldChangeHandler = (e) => {

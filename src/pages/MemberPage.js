@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Lead from '../components/Lead/Lead';
@@ -11,21 +11,8 @@ const MemberPage = (props) => {
   return (
     <div className="p-1">
       <Routes>
-        <Route
-          path="/lead"
-          element={
-            <Lead authToken={props.authToken} currentUser={props.currentUser} />
-          }
-        />
-        <Route
-          path="lead/:id/phases"
-          element={
-            <Phase
-              authToken={props.authToken}
-              currentUser={props.currentUser}
-            />
-          }
-        />
+        <Route path="/lead" element={<Lead />} />
+        <Route path="lead/:id/phases" element={<Phase />} />
         <Route
           path="lead/:leadId/phases/:phaseId/engineers"
           element={<PhaseEnginners />}

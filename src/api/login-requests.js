@@ -1,72 +1,37 @@
 import axios from 'axios';
 import { BASE_URL, messages } from '../data/constants';
 
-export const loginRequest = async (
-  email,
-  password,
-  setUserHandler,
-  setSpinnerShow
-) => {
-  let data = {
-    user: {
-      email: email,
-      password: password,
-    },
-  };
-  setSpinnerShow(true);
-  axios
+export const loginRequest = async (data) => {
+  const response = await axios
     .post(`${BASE_URL}/users/sign_in`, data)
-    .then((response) => {
-      console.log(response);
-      if (response.data.status === 'unauthorized') {
-        alert(messages.incorrect_credentails);
-        setSpinnerShow(false);
-        return;
-      }
+    .catch((error) => console.log(error));
 
-      if (response.data.user !== null) {
-        setUserHandler(response);
-        localStorage.setItem('auth_token', response.headers.authorization);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        axios.defaults.headers.common['Authorization'] =
-          response.headers.authorization;
-        setSpinnerShow(false);
-      } else {
-        axios.defaults.headers.common['Authorization'] = null;
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user');
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      setSpinnerShow(false);
-    });
+  if (response.data.status === 'unauthorized') {
+    alert(messages.incorrect_credentails);
+    return false;
+  }
+  axios.defaults.headers.common['Authorization'] =
+    response.headers.authorization;
+
+  return response;
 };
 
-export const logoutRequest = async (
-  authToken,
-  setAuthToken,
-  setUser,
-  setLoggedIn
-) => {
+export const logoutRequest = async (authToken) => {
   const config = {
     header: {
       authorization: authToken,
     },
   };
 
-  axios
+  const response = await axios
     .delete(`${BASE_URL}/users/sign_out`, config)
-    .then(() => {
-      setAuthToken(null);
-      setUser(null);
-      setLoggedIn(false);
-      alert(messages.success_logout);
-      axios.defaults.headers.common['Authorization'] = null;
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user');
-    })
     .catch((error) => console.log(error));
+
+  if (response?.status === 200) {
+    alert(messages.success_logout);
+    axios.defaults.headers.common['Authorization'] = null;
+    return response;
+  }
 };
 
 export const registerNewUserApiRequest = (

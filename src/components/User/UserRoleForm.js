@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
@@ -13,17 +13,21 @@ const UserRoleForm = (props) => {
   const [newroles, setNewroles] = useState([]);
   const [spinnerShow, setSpinnerShow] = useState(false);
 
-  const submitFormHandler = (e) => {
+  const submitFormHandler = async (e) => {
     e.preventDefault();
     setSpinnerShow(true);
 
-    assignRolesToUser(
-      props.currentUser.id,
-      newroles,
-      props.setUsersList,
-      props.setModalShow,
-      setSpinnerShow
-    );
+    const response = await assignRolesToUser(props.currentUser.id, newroles);
+    if (response?.status === 200) {
+      const changedUserIndex = props.usersList.findIndex(
+        (obj) => obj.id === props.currentUser.id
+      );
+      const newlist = props.usersList;
+      newlist[changedUserIndex] = response.data;
+      props.setUsersList(newlist);
+    }
+    props.setModalShow(false);
+    setSpinnerShow(false);
   };
 
   return (

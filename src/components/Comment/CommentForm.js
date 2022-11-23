@@ -1,21 +1,60 @@
 import React, { Fragment, useState } from 'react';
 
 import Spinner from '../../UI/Spinner';
-import { createCommentRequest } from '../../api/comment-requests';
+import storage from '../../firebaseConfig';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+
+import {
+  createCommentRequest,
+  storecommentImages,
+} from '../../api/comment-requests';
 import { messages } from '../../data/constants';
 
 const CommentForm = (props) => {
   const [spinnerShow, setSpinnerShow] = useState(false);
   const [content, setContent] = useState('');
-  // const [file, setFile] = useState(null);
-  // const [formData, setFormData] = useState(defaultCommentState);
+  const [files, setFiles] = useState([]);
+  const [percent, setPercent] = useState(0);
 
   const onImageChange = (e) => {
-    e.persist();
-    // setFile(e.target.image.files[0]);
+    setFiles([...files, ...e.target.files]);
   };
 
-  const formSubmitHandler = (e) => {
+  const handleImageUpload = (setSpinnerShow, response) => {
+    if (files.length === 0) {
+      alert('Please choose a file first!');
+    }
+    const promises = [];
+    files.map((file) => {
+      const storageRef = ref(storage, `/files/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      promises.push(uploadTask);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setPercent(percent);
+        },
+        (err) => console.log(err),
+        async () => {
+          await getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
+            storecommentImages(response.data.id, url);
+            props.setExtractAgain(url);
+          });
+        }
+      );
+    });
+
+    Promise.all(promises).then(() => {
+      setSpinnerShow(false);
+      props.setModalShow(false);
+    });
+  };
+
+  const formSubmitHandler = async (e) => {
     e.preventDefault();
 
     if (content === '') {
@@ -23,19 +62,15 @@ const CommentForm = (props) => {
       return;
     }
 
-    const data = {
-      ...props.commentState,
-      content,
-      // image: file,
-    };
-
     setSpinnerShow(true);
-    createCommentRequest(
-      data,
-      props.setCommentsList,
-      setSpinnerShow,
-      props.setModalShow
-    );
+
+    const data = { ...props.commentState, content };
+    const response = await createCommentRequest(data);
+
+    if (response.status === 201) {
+      handleImageUpload(setSpinnerShow, response);
+      setSpinnerShow(true);
+    }
   };
 
   return (
@@ -66,16 +101,18 @@ const CommentForm = (props) => {
                 />
               </div>
             </div>
-            {/* <label className="flex gap-2">
+            <label className="flex gap-2">
               Comment Image:
               <input
                 type="file"
                 name="image"
-                accept="image/png, image/gif, image/jpeg"
+                accept="image/*"
                 id="image"
+                multiple
                 onChange={onImageChange}
               />
-            </label> */}
+              <p>{`${percent} % done`}</p>
+            </label>
             <button
               className="float-right bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-500 ease-in-out duration-100"
               type="submit"

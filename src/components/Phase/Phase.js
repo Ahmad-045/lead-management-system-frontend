@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Modal from '../../UI/Modal';
@@ -8,14 +8,19 @@ import PhaseForm from './PhaseForm';
 import Spinner from '../../UI/Spinner';
 
 import { extractPhasesOfLead } from '../../api/phase-requests';
+import UserContext from '../../store/user-context';
 
 const Phase = (props) => {
+  const userCtx = useContext(UserContext);
+
   const { id } = useParams();
+
   const [phases, setPhases] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [manager, setManager] = useState(null);
   const [spinnerShow, setSpinnerShow] = useState(true);
-  const userRoles = [...props.currentUser.roles.map((x) => x.name)];
+
+  const userRoles = [...userCtx.user.roles.map((x) => x.name)];
 
   const showPhaseManagerDetails = (phase) => {
     setManager(phase.manager);
@@ -28,7 +33,17 @@ const Phase = (props) => {
   };
 
   useEffect(() => {
-    extractPhasesOfLead(id, setPhases, setSpinnerShow);
+    const extractPhasesOfLeadHandler = async () => {
+      const response = await extractPhasesOfLead(id);
+      if (response?.status === 200) {
+        setPhases(response.data);
+        setSpinnerShow(false);
+      } else {
+        alert('Something went wrong.!!, kindly check the error logs');
+        setSpinnerShow(false);
+      }
+    };
+    extractPhasesOfLeadHandler();
   }, [id, props.authToken]);
 
   let buttonData = '';
@@ -55,7 +70,6 @@ const Phase = (props) => {
           phaselist={phases}
           showManagerDetails={showPhaseManagerDetails}
           setPhases={setPhases}
-          currentUser={props.currentUser}
           id={id}
         />
       )}

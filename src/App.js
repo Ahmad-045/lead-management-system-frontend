@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import MemberPage from './pages/MemberPage';
 import GuestPage from './pages/GuestPage';
 import Navigation from './components/Navigation';
 import { useNavigate } from 'react-router-dom';
+
+import UserContext from './store/user-context';
 
 import { logoutRequest } from './api/login-requests';
 import Spinner from './UI/Spinner';
@@ -10,9 +12,8 @@ import CurrentUser from './components/CurrentUser';
 
 function App() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [authToken, setAuthToken] = useState(null);
+  const userCtx = useContext(UserContext);
+
   const [spinnerShow, setSpinnerShow] = useState(false);
 
   useEffect(() => {
@@ -21,59 +22,45 @@ function App() {
         localStorage.getItem('user') !== null &&
         localStorage.getItem('user') !== 'undefined'
       ) {
-        setUser(JSON.parse(localStorage.getItem('user')));
-        setAuthToken(localStorage.getItem('auth_token'));
-        setLoggedIn(true);
+        userCtx.setUser(JSON.parse(localStorage.getItem('user')));
+        userCtx.setAuthToken(localStorage.getItem('auth_token'));
       }
     };
     extractDataFromLocalStorage();
   }, []);
 
-  const loginUserHandler = (responseFromApiRequest) => {
-    setUser(responseFromApiRequest.data.user);
-    setAuthToken(responseFromApiRequest.headers.authorization);
-
-    responseFromApiRequest.data.user !== null
-      ? setLoggedIn(true)
-      : setLoggedIn(false);
-
-    navigate('/lead');
-  };
-
-  const logoutUserHandler = () => {
-    logoutRequest(authToken, setAuthToken, setUser, setLoggedIn);
-    navigate('/');
-
-    // navigate(0);
+  const logoutUserHandler = async () => {
+    const response = await logoutRequest(userCtx.authToken);
+    if (response?.status === 200) {
+      userCtx.setAuthToken('');
+      userCtx.setUser(null);
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      navigate('/');
+    }
   };
 
   return (
-    <div className="">
+    <Fragment>
       <nav>
-        <Navigation
-          loggedIn={loggedIn}
-          logoutHander={logoutUserHandler}
-          currentUser={user}
-        />
+        <Navigation logoutHander={logoutUserHandler} />
       </nav>
       <div className="p-5">
-        <CurrentUser loggedIn={loggedIn} currentUser={user} />
-
-        {loggedIn && <MemberPage currentUser={user} authToken={authToken} />}
+        {userCtx.authToken.length !== 0 && (
+          <>
+            <CurrentUser currentUser={userCtx.user} />
+            <MemberPage currentUser={userCtx.user} />
+          </>
+        )}
         {spinnerShow ? (
           <Spinner />
         ) : (
-          !loggedIn && (
-            <GuestPage
-              setUserHandler={loginUserHandler}
-              setSpinnerShow={setSpinnerShow}
-              setUser={setUser}
-              setAuthToken={setAuthToken}
-            />
+          userCtx.authToken.length === 0 && (
+            <GuestPage setSpinnerShow={setSpinnerShow} />
           )
         )}
       </div>
-    </div>
+    </Fragment>
   );
 }
 

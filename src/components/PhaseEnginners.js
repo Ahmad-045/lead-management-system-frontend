@@ -12,7 +12,14 @@ const PhaseEnginners = () => {
   const [spinnerShow, setSpinnerShow] = useState(true);
 
   useEffect(() => {
-    extractEngineersOfPhase(phaseId, setEngineers, setSpinnerShow);
+    const extractEngOfPhaseHandler = async () => {
+      const response = await extractEngineersOfPhase(phaseId);
+      if (response?.status === 200) {
+        setEngineers(response.data);
+      }
+      setSpinnerShow(false);
+    };
+    extractEngOfPhaseHandler();
   }, [phaseId]);
 
   const engineersData = (

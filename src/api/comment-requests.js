@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { setauthToken, checkUnauthoriztionaStatus } from './helper-functions';
-import { BASE_URL, messages } from '../data/constants';
+import { setauthToken } from './helper-functions';
+import { BASE_URL } from '../data/constants';
 
 export const extractCommentRequest = (
   commentTypeForUrl,
@@ -25,13 +25,7 @@ export const extractCommentRequest = (
     });
 };
 
-export const createCommentRequest = (
-  commentState,
-  setCommentsList,
-  setSpinnerShow,
-  setModalShow
-) => {
-  console.log(commentState);
+export const createCommentRequest = async (commentState) => {
   setauthToken();
   const commentTypeForUrl = commentState.commentable_type;
   commentState.commentable_type = commentState.commentable_type.replaceAll(
@@ -40,25 +34,21 @@ export const createCommentRequest = (
   );
 
   commentState.commentable_id = parseInt(commentState.commentable_id);
-  axios
-    .post(
-      `${BASE_URL}${commentTypeForUrl}${commentState.commentable_id}/comments`,
-      { data: commentState }
-    )
-    .then((res) => {
-      extractCommentRequest(
-        commentTypeForUrl,
-        commentState.commentable_id,
-        setCommentsList,
-        setSpinnerShow
-      );
-      console.log(res);
-      setSpinnerShow(false);
-      setModalShow(false);
-    })
-    .catch((error) => {
-      setSpinnerShow(false);
-      console.log(error);
-      setModalShow(false);
-    });
+  const res = await axios.post(
+    `${BASE_URL}${commentTypeForUrl}${commentState.commentable_id}/comments`,
+    { data: commentState }
+  );
+  return res;
+};
+
+export const storecommentImages = async (commentId, url) => {
+  let data = {
+    comment_id: commentId,
+    image_url: url,
+  };
+
+  const res = await axios.post(`${BASE_URL}/comments/${commentId}/images`, {
+    image: data,
+  });
+  return res;
 };

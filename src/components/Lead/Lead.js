@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import LeadDetails from './LeadDetails';
 import LeadLists from './LeadLists';
@@ -7,16 +7,24 @@ import LeadForm from './LeadForm';
 import Spinner from '../../UI/Spinner';
 
 import { getAllTheLeadsFromApi } from '../../api/lead-requests';
+import UserContext from '../../store/user-context';
 
 const Lead = (props) => {
+  const userCtx = useContext(UserContext);
+
   const [leadsList, setLeadsList] = useState([]);
   const [singleleadData, setSingleleadData] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [spinnerShow, setSpinnerShow] = useState(true);
-  const userRoles = [...props.currentUser.roles.map((x) => x.name)];
+  const userRoles = [...userCtx.user.roles.map((x) => x.name)];
 
   useEffect(() => {
-    getAllTheLeadsFromApi(setLeadsList, setSpinnerShow);
+    const getLeadData = async () => {
+      const respone = await getAllTheLeadsFromApi();
+      setLeadsList(respone.data);
+      setSpinnerShow(false);
+    };
+    getLeadData();
   }, []);
 
   const showLeadDetailsHandler = (lead) => {
@@ -61,12 +69,7 @@ const Lead = (props) => {
         <Modal onhideDetails={() => setModalShow(false)}>
           {singleleadData && <LeadDetails singleleadData={singleleadData} />}
           {!singleleadData && (
-            <LeadForm
-              currentUser={props.currentUser}
-              setModalShow={setModalShow}
-              authToken={props.authToken}
-              setLeadsList={setLeadsList}
-            />
+            <LeadForm setModalShow={setModalShow} setLeadsList={setLeadsList} />
           )}
         </Modal>
       )}

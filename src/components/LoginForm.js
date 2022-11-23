@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { loginRequest } from '../api/login-requests';
 import { messages } from '../data/constants';
+import UserContext from '../store/user-context';
 
 const LoginForm = (props) => {
+  const userCtx = useContext(UserContext);
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
     if (email === '' || password === '') {
@@ -14,10 +19,30 @@ const LoginForm = (props) => {
       return;
     }
 
-    loginRequest(email, password, props.setUserHandler, props.setSpinnerShow);
+    const data = {
+      user: {
+        email: email,
+        password: password,
+      },
+    };
 
-    setEmail('');
-    setPassword('');
+    props.setSpinnerShow(true);
+
+    const response = await loginRequest(data);
+
+    if (response.status === 200) {
+      userCtx.setAuthToken(response.headers.authorization);
+      userCtx.setUser(response.data.user);
+
+      localStorage.setItem('auth_token', response.headers.authorization);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+
+      setEmail('');
+      setPassword('');
+      navigate('/lead');
+    }
+
+    props.setSpinnerShow(false);
   };
 
   return (

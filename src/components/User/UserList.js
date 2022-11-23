@@ -35,12 +35,22 @@ const UserList = (props) => {
     setUserRole(currentUserRoes);
   };
 
-  const deleteUser = (userId) => {
-    deleteUserRequest(userId, usersList, setUsersList);
+  const deleteUser = async (userId) => {
+    const response = await deleteUserRequest(userId, usersList, setUsersList);
+    if (response?.status === 200) {
+      setUsersList(usersList.filter((obj) => obj.id !== userId));
+    }
   };
 
   useEffect(() => {
-    extractUsersFromApi(setUsersList, setSpinnerShow);
+    const extractUsersHandler = async () => {
+      const response = await extractUsersFromApi(setUsersList, setSpinnerShow);
+      if (response?.status === 200) {
+        setUsersList(response.data);
+      }
+      setSpinnerShow(false);
+    };
+    extractUsersHandler();
   }, []);
 
   return (
@@ -116,6 +126,7 @@ const UserList = (props) => {
               setModalShow={setModalShow}
               setUsersList={setUsersList}
               userRole={userRole}
+              usersList={usersList}
             />
           )}
         </Modal>

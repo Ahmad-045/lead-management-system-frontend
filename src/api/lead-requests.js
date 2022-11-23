@@ -2,88 +2,51 @@ import axios from 'axios';
 import { setauthToken, checkUnauthoriztionaStatus } from './helper-functions';
 import { BASE_URL, messages } from '../data/constants';
 
-export const getAllTheLeadsFromApi = async (setLeadsList, setSpinnerShow) => {
+export const getAllTheLeadsFromApi = async () => {
   setauthToken();
-  axios
+
+  const response = await axios
     .get(`${BASE_URL}/leads`)
-    .then((response) => {
-      if (response.data.user !== null) {
-        setLeadsList(response.data);
-        setSpinnerShow(false);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      setSpinnerShow(false);
-    });
-};
-
-export const createNewLead = async (
-  formData,
-  user,
-  setModalShow,
-  setLeadsList,
-  setSpinnerShow
-) => {
-  setSpinnerShow(true);
-  setauthToken();
-  const data = {
-    ...formData,
-    user_id: user.id,
-    test_type: parseInt(formData.test_type),
-  };
-
-  axios
-    .post(`${BASE_URL}/leads`, data)
-    .then((res) => {
-      if (checkUnauthoriztionaStatus(res.data.status)) {
-        setSpinnerShow(false);
-        return;
-      }
-
-      alert(messages.lead.success_creation);
-      setSpinnerShow(false);
-      setModalShow(false);
-      getAllTheLeadsFromApi(setLeadsList, setSpinnerShow);
-    })
-    .catch((error) => {
-      console.log(error);
-      setSpinnerShow(false);
-    });
-};
-
-export const leadToProjectConvesion = (
-  leadId,
-  setLeadsList,
-  setSpinnerShow
-) => {
-  setauthToken();
-  const data = {
-    lead_id: leadId,
-    conversion_date: new Date(),
-  };
-
-  axios
-    .post(`${BASE_URL}/projects`, data)
-    .then((res) => {
-      if (!checkUnauthoriztionaStatus(res.data.status)) {
-        alert(messages.lead.success_updation);
-        getAllTheLeadsFromApi(setLeadsList, setSpinnerShow);
-      }
-    })
     .catch((error) => console.log(error));
+
+  if (response.data.user !== null) {
+    return response;
+  }
 };
 
-export const deleteLeadRequest = (leadId, leadslist, setLeadsList) => {
+export const createNewLead = async (formData) => {
   setauthToken();
-  axios
+
+  const response = await axios
+    .post(`${BASE_URL}/leads`, formData)
+    .catch((error) => console.log(error));
+
+  if (!checkUnauthoriztionaStatus(response.data.status)) {
+    return response;
+  }
+};
+
+export const leadToProjectConvesion = async (data) => {
+  setauthToken();
+
+  const response = await axios
+    .post(`${BASE_URL}/projects`, data)
+    .catch((error) => console.log(error));
+
+  if (!checkUnauthoriztionaStatus(response.data.status)) {
+    alert(messages.lead.success_updation);
+    return response;
+  }
+};
+
+export const deleteLeadRequest = async (leadId, leadslist, setLeadsList) => {
+  setauthToken();
+
+  const response = await axios
     .delete(`${BASE_URL}/leads/${leadId}`)
-    .then((res) => {
-      if (!checkUnauthoriztionaStatus(res.data.status)) {
-        setLeadsList(leadslist.filter((obj) => obj.id !== leadId));
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => console.log(error));
+
+  if (!checkUnauthoriztionaStatus(response.data.status)) {
+    return response;
+  }
 };

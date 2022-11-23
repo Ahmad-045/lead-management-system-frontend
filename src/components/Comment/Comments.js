@@ -17,6 +17,7 @@ const Comments = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const [spinnerShow, setSpinnerShow] = useState(false);
   const [commentState, setCommentState] = useState(defaultCommentType);
+  const [extractAgain, setExtractAgain] = useState('');
 
   const setTypesToCreateComment = (id) => {
     setCommentState({
@@ -34,7 +35,7 @@ const Comments = (props) => {
       setCommentsList,
       setSpinnerShow
     );
-  }, [props.id, props.commentType, commentState]);
+  }, [props.id, props.commentType, commentState, extractAgain]);
 
   return (
     <div className="mt-4">
@@ -72,6 +73,11 @@ const Comments = (props) => {
                 </div>
               </div>
               <p className="-mt-4 text-gray-500">{comment.content}</p>
+              <ul className="-mt-4 text-gray-500">
+                {comment.images.map((image, index) => (
+                  <li key={image + index}>{image.image_url}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
@@ -82,6 +88,7 @@ const Comments = (props) => {
             setModalShow={setModalShow}
             commentState={commentState}
             setCommentsList={setCommentsList}
+            setExtractAgain={setExtractAgain}
           />
         </Modal>
       )}

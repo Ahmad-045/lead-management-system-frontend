@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import InputMask from 'react-input-mask';
 
 import Spinner from '../../UI/Spinner';
 
 import { createNewLead } from '../../api/lead-requests';
 import { messages } from '../../data/constants';
+import UserContext from '../../store/user-context';
 
 const defaultFormState = {
   project_name: '',
@@ -14,14 +15,18 @@ const defaultFormState = {
   client_contact: '',
   platform_used: '',
   test_type: '',
+  user_id: '',
 };
 
 const LeadForm = (props) => {
+  const userCtx = useContext(UserContext);
+
   const [formData, setFormData] = useState(defaultFormState);
   const [spinnerShow, setSpinnerShow] = useState(false);
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
+    formData.user_id = parseInt(userCtx.user.id);
 
     const isEmpty = Object.values(formData).every((x) => x !== '');
 
@@ -40,14 +45,19 @@ const LeadForm = (props) => {
       alert(messages.form.not_valid_number);
       return;
     }
+    setSpinnerShow(true);
+    createNewLeadHandler();
+  };
 
-    createNewLead(
-      formData,
-      props.currentUser,
-      props.setModalShow,
-      props.setLeadsList,
-      setSpinnerShow
-    );
+  const createNewLeadHandler = async () => {
+    formData.test_type = parseInt(formData.test_type);
+
+    const response = await createNewLead(formData);
+    if (response.status === 201) {
+      setSpinnerShow(false);
+      props.setModalShow(false);
+      props.setLeadsList((prevState) => [...prevState, response.data]);
+    }
   };
 
   const inputFieldChangeHandler = (e) => {

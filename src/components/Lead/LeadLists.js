@@ -9,12 +9,34 @@ import {
 const LeadLists = (props) => {
   const navigate = useNavigate();
 
-  const makeItASale = (leadId) => {
-    leadToProjectConvesion(leadId, props.setLeadsList, props.setSpinnerShow);
+  const makeItASale = async (leadId) => {
+    const data = {
+      lead_id: leadId,
+      conversion_date: new Date(),
+    };
+    const response = await leadToProjectConvesion(data);
+    if (response?.status === 200) {
+      props.setLeadsList((prevState) => {
+        let data = [...prevState];
+        let indexOfChangedList = props.leadslist.findIndex(
+          (list) => list.id === response.data.lead_id
+        );
+        data[indexOfChangedList] = {
+          ...data[indexOfChangedList],
+          sale: response.data.conversion_date,
+        };
+        return data;
+      });
+    }
+
+    props.setSpinnerShow(false);
   };
 
-  const deleteLead = (leadId) => {
-    deleteLeadRequest(leadId, props.leadslist, props.setLeadsList);
+  const deleteLead = async (leadId) => {
+    const response = await deleteLeadRequest(leadId);
+    if (response?.status === 200) {
+      props.setLeadsList(props.leadslist.filter((obj) => obj.id !== leadId));
+    }
   };
 
   return (

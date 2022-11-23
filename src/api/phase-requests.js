@@ -2,117 +2,68 @@ import axios from 'axios';
 import { setauthToken, checkUnauthoriztionaStatus } from './helper-functions';
 import { BASE_URL, messages } from '../data/constants';
 
-export const extractPhasesOfLead = async (
-  lead_id,
-  setPhases,
-  setSpinnerShow
-) => {
+export const extractPhasesOfLead = async (lead_id) => {
   setauthToken();
-  axios
+
+  const response = await axios
     .get(`${BASE_URL}/leads/${lead_id}`)
-    .then((res) => {
-      setPhases(res.data);
-      setSpinnerShow(false);
-    })
     .catch((error) => console.log(error));
+
+  return response;
 };
 
-export const createNewPhase = async (
-  formData,
-  lead_id,
-  setModalShow,
-  setPhases,
-  setSpinnerShow
-) => {
+export const createNewPhase = async (formData) => {
   setauthToken();
-  const data = {
-    ...formData,
-    lead_id: parseInt(lead_id),
-  };
-  axios
-    .post(`${BASE_URL}/phases`, data)
-    .then((res) => {
-      setModalShow(false);
-      extractPhasesOfLead(lead_id, setPhases, setSpinnerShow);
-      setSpinnerShow(false);
-    })
-    .catch((error) => {
-      console.log(error);
-      setSpinnerShow(false);
-    });
+
+  const respone = await axios
+    .post(`${BASE_URL}/phases`, formData)
+    .catch((error) => console.log(error));
+  return respone;
 };
 
-export const phaseStatusApiRequest = (phaseId, newValue, setSpinnerShow) => {
+export const phaseStatusApiRequest = async (phaseId, newValue) => {
   setauthToken();
-  axios
+
+  const response = await axios
     .patch(`${BASE_URL}/phases/${phaseId}`, { status: newValue })
-    .then((res) => {
-      if (checkUnauthoriztionaStatus(res.data.status)) {
-        setSpinnerShow(false);
-        return;
-      }
-      setSpinnerShow(false);
-      alert(messages.phase.success_update_status);
-    })
-    .catch((error) => {
-      console.log(error);
-      setSpinnerShow(false);
-    });
+    .catch((error) => console.log(error));
+
+  if (!checkUnauthoriztionaStatus(response.data.status)) {
+    alert(messages.phase.success_update_status);
+    return response;
+  }
 };
 
-export const deletePhaseRequest = (phaseId, phaselist, setPhases) => {
+export const deletePhaseRequest = async (phaseId, phaselist, setPhases) => {
   setauthToken();
-  axios
+
+  const response = await axios
     .delete(`${BASE_URL}/phases/${phaseId}`)
-    .then((res) => {
-      if (!checkUnauthoriztionaStatus(res.data.status)) {
-        setPhases(phaselist.filter((obj) => obj.id !== phaseId));
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => console.log(error));
+
+  if (!checkUnauthoriztionaStatus(response.data.status)) {
+    return response;
+  }
 };
 
-export const assignEnginnersApiRequest = (
-  engIds,
-  id,
-  setSpinnerShow,
-  hideModal
-) => {
+export const assignEnginnersApiRequest = async (engIds, id) => {
   setauthToken();
-  axios
+
+  const response = await axios
     .post(`${BASE_URL}/assign_engineer`, { data: { engIds, id } })
-    .then((res) => {
-      if (checkUnauthoriztionaStatus(res.data.status)) {
-        setSpinnerShow(false);
-        return;
-      }
-      setSpinnerShow(false);
-      hideModal(false);
-      alert(messages.phase.success_added_eng);
-    })
-    .catch((error) => {
-      console.log(error);
-      setSpinnerShow(false);
-      hideModal(false);
-    });
+    .catch((error) => console.log(error));
+
+  if (!checkUnauthoriztionaStatus(response.data.status)) {
+    alert(messages.phase.success_added_eng);
+    return response;
+  }
 };
 
-export const extractEngineersOfPhase = (
-  phaseId,
-  setEngineers,
-  setSpinnerShow
-) => {
+export const extractEngineersOfPhase = async (phaseId) => {
   setauthToken();
-  axios
+  const response = await axios
     .get(`${BASE_URL}/get_engineer_users/${phaseId}`)
-    .then((res) => {
-      setEngineers(res.data);
-      setSpinnerShow(false);
-    })
-    .catch((error) => {
-      console.log(error);
-      setSpinnerShow(false);
-    });
+    .catch((error) => console.log(error));
+
+  return response;
 };

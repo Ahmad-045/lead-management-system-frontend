@@ -6,6 +6,7 @@ import Spinner from '../UI/Spinner';
 
 import { extractUserWithRoleForForm } from '../api/user-requests';
 import { assignEnginnersApiRequest } from '../api/phase-requests';
+import { matchUserToSelectFields } from '../api/helper-functions';
 
 const animatedComponents = makeAnimated();
 
@@ -15,19 +16,27 @@ const EngineerForm = (props) => {
   const [spinnerShow, setSpinnerShow] = useState(true);
 
   useEffect(() => {
-    extractUserWithRoleForForm('engineer', setEngineers, setSpinnerShow);
+    const extractEngineersHandler = async () => {
+      const response = await extractUserWithRoleForForm('engineer');
+      if (response.status === 200) {
+        setEngineers(matchUserToSelectFields(response.data));
+      }
+      setSpinnerShow(false);
+    };
+    extractEngineersHandler();
   }, []);
 
-  const submitFormHandler = (e) => {
+  const submitFormHandler = async (e) => {
     e.preventDefault();
+
     setSpinnerShow(true);
     let engIds = selectedOptions.map((eng) => eng.value);
-    assignEnginnersApiRequest(
-      engIds,
-      props.phaseid,
-      setSpinnerShow,
-      props.hideModal
-    );
+    const response = await assignEnginnersApiRequest(engIds, props.phaseid);
+    console.log(response);
+    if (response.status === 200) {
+      setSpinnerShow(false);
+      props.hideModal(false);
+    }
   };
 
   return (
