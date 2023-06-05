@@ -10,7 +10,7 @@ If everything is properly setup then, it is very easy to use. However, in case o
 Please find the Images of the working project attached below
 
 This page shows all the Leads, that are present in the system. Leads are basically the Porjects that are in the system. Here you can see important things about leads like project name, created by, No. Of Phases in the lead and multiple buttons for interaction and to view more details
-![Page to Show all the leads(projects) in the system](https://lh3.googleusercontent.com/pw/AJFCJaXKWNWJhssmdc9LoaRzaj-Lvqz8rShUP6LUTSM2CydNH3nUTugaxvd9kyZh6dnkO_vUn-gfvC1VI4OWTLmnhU7jq9D5abf44ROpHt1Kd07MQuFRYfP4PJ-mHndbWzJk_grWLwMiPjTqR6UM7r-zYW2AvHmvE70KDfLIZkXXQ16rBm4sUYDab7FlRxxV1H73r2nZodLBuygaAXAWstFtSr-GkOUnvGhd_zYE9A6PH9oguSJdVHgxwx6HNMrZjhOIV7HjVjjoaNdzCEwQf8Zdt2Kw1TrRgGRBlDHDy8NexswM-Ryu4F1Qbrb8nemPMQTy4YG1UcZihBAcMXqmUiXkXvGhG1ZUfxv4e-Nypj2Ki8vpQQXx2f9TiP9e35a-RXjnbm4ZTqWF4PrliYJkLeTtjhOxplBitLYRxfkm-e0N4JJHqmDK5CmJNQ65RWrDYPJbADRJwEg2DqmUttS-ynO-RS6Syww7N8__-h-55u4KsnlT_cxbBy4DTihao_Y0CI0WxBxKa6Kjjv30aKjkSbGWf8ZaX055UW1eL2lykeKd3VQeGy0u9enxqnaILUnQbGLPgX2ZwLZ0JVudUilYcdKBXmTBbPlOyeBwQmAFk2L4ZWXyF_Hz5_2SB7OzdRmJib0XmXFf_aT90_P6GxevVHCR4hFoTDFfvkUpV58A-kBm-FKy8gTVjZKF8SP356R6QeA2br8zDFlkxNuH5wo2WWKsCNqKS2pc2klredhKgvNjyEbJMjAjtKSExzQEelMtnFnHrAHRw5axdGMCTmaswRasMUAolC-vIb2wENYd6aia5fYgalHRQbV1mW9j7em7l0Xe3v3lw7wJWJQMO4RlUi_c7cT--XHBJoNnz-MHlx1uB3NlDXBQgAtJCfhX6HIAb9M50GcWQeOXR7eIrme9AfbhB3dDEvQ=w1836-h776-s-no?authuser=0)
+![Page to Show all the leads(projects) in the system](https://drive.google.com/uc?export=view&id=1o9M62xhbY8r7Sih5VXreeifMriNgnRFe)
 
 <br /><br />
 Add a new lead in the system, comes with the Modal and have multiple important fields to enter. like email, contact no., name, etc
